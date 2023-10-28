@@ -1,2 +1,2 @@
 dist
-package-Lock.json
+package - Lock.json
