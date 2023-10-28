@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import Usuario from '../models/Usuario.js'
+import User from '../models/User.js'
 
 const checkAuth = async (req, res, next) => {
   let token
@@ -10,17 +10,15 @@ const checkAuth = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1]
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
-      req.usuario = await Usuario.findById(decoded.id).select(
-        '+id +email +username'
-      )
+      req.user = await User.findById(decoded.id).select('+id +email +username')
       return next()
     } catch (error) {
-      return res.status(404).json({ msg: 'Hubo un error' })
+      return res.status(404).json({ msg: error.message })
     }
   }
 
   if (!token) {
-    const error = new Error('Token no válido')
+    const error = new Error('Token inválido')
     return res.status(401).json({ msg: error.message })
   }
 
