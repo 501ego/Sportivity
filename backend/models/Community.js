@@ -4,13 +4,13 @@ const CommunitySchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      unique: true,
       required: true,
       trim: true,
     },
     forum: {
-      type: Number,
-      required: true,
-      trim: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Forum',
     },
     activity: {
       type: Number,
@@ -31,6 +31,7 @@ const CommunitySchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Person',
+        required: true,
       },
     ],
     moderator: [
@@ -53,7 +54,6 @@ const CommunitySchema = new mongoose.Schema(
     ],
     valoration: {
       type: Number,
-      required: true,
       trim: true,
     },
   },

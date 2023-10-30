@@ -58,11 +58,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    profile: {
-      type: Number,
-      unique: true,
-      trim: true,
-    },
     token: {
       type: String,
     },
@@ -73,6 +68,15 @@ const UserSchema = new mongoose.Schema(
     community: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Community',
+      default: null,
+    },
+    isValidated: {
+      type: Boolean,
+      default: false,
+    },
+    isMod: {
+      type: Boolean,
+      default: false,
     },
   },
   {
