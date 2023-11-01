@@ -1,80 +1,78 @@
-import User from '../../models/User.js'
-import generateId from '../../helpers/generateId.js'
+import UserDAO from '../../dao/userDAO.js'
 
 const register = async (req, res) => {
-  const { userName, email } = req.body
-  const userExist = await User.findOne({ userName })
-  const emailExist = await User.findOne({ email })
-  if (userExist) {
-    const error = new Error('Nombre de usuario no disponible')
-    return res.status(400).json({ msg: error.message })
-  } else if (emailExist) {
-    const error = new Error('El correo ya ha sido registrado')
-    return res.status(400).json({ msg: error.message })
-  }
-
   try {
-    const user = new User(req.body)
-    user.token = generateId()
-    await user.save()
-    //TODO sendEmail(user.email, user.token)
+    const { userName, email } = req.body
+
+    if (await UserDAO.findUserByField('userName', userName)) {
+      return res.status(400).json({ msg: 'Nombre de usuario no disponible' })
+    }
+
+    if (await UserDAO.findUserByField('email', email)) {
+      return res.status(400).json({ msg: 'El correo ya ha sido registrado' })
+    }
+
+    await UserDAO.createUser(req.body)
     return res.status(201).json({
       msg: 'Usuario registrado correctamente, revisa tu email para confirmar tu cuenta',
     })
+    //TODO sendEmail(user.email, user.token)
   } catch (error) {
     return res.status(500).json({ msg: error.message })
   }
 }
 
 const editUser = async (req, res) => {
-  const { id } = req.params
-  const userExist = await User.findById(id)
-
-  if (!userExist) {
-    return res.status(400).json({ msg: 'El usuario no está registrado' })
-  } else if (!userExist._id.toString() === req.user._id.toString()) {
-    return res.status(400).json({ msg: 'No tienes permiso para editar' })
-  } else {
-    try {
-      const updateFields = [
-        'name',
-        'lastName',
-        'city',
-        'commune',
-        'region',
-        'country',
-        'profession',
-      ]
-      updateFields.forEach(field => {
-        if (req.body[field]) {
-          userExist[field] = req.body[field]
-        }
-      })
-      await userExist.save()
-      return res.status(200).json({ msg: 'Usuario editado' })
-    } catch (error) {
-      return res.status(500).json({ msg: error.message })
+  try {
+    const { id } = req.params
+    const userExist = await UserDAO.findUserById(id)
+    if (!userExist) {
+      return res.status(400).json({ msg: 'El usuario no está registrado' })
     }
+    if (userExist._id.toString() !== req.user._id.toString()) {
+      return res.status(400).json({ msg: 'No tienes permiso para editar' })
+    }
+    const updateFields = {
+      name: req.body.name,
+      lastName: req.body.lastName,
+      city: req.body.city,
+      commune: req.body.commune,
+      region: req.body.region,
+      country: req.body.country,
+      profession: req.body.profession,
+    }
+    const updatedUser = await UserDAO.updateUser(id, updateFields)
+    if (!updatedUser) {
+      return res.status(500).json({ msg: 'Error al actualizar el usuario' })
+    }
+    return res.status(200).json({ msg: 'Usuario editado' })
+  } catch (error) {
+    return res.status(500).json({ msg: error.message })
   }
 }
 
 const validateUser = async (req, res) => {
   const { id } = req.params
   const { rut, password } = req.body
-  const userExist = await User.findById(id)
+  const userExist = await UserDAO.findUserById(id)
   if (!userExist) {
     return res.status(400).json({ msg: 'El usuario no está registrado' })
-  } else if (!userExist._id.toString() === req.user._id.toString()) {
+  } else if (String(userExist._id) !== req.user._id.toString()) {
     return res
       .status(400)
       .json({ msg: 'No tienes permiso para realizar esta acción' })
-  } else if (await userExist.verifyPassword(password)) {
+  } else if (await UserDAO.verifyPassword(userExist, password)) {
     // TODO validar RUT (agregar funcion desde helpers/validateRut.js)
     try {
-      userExist.rut = rut
-      userExist.isValidated = true
-      await userExist.save()
-      return res.status(200).json({ msg: 'Usuario validado' })
+      const updatedUser = await UserDAO.updateUser(userExist._id, {
+        rut: rut,
+        isValidated: true,
+      })
+      if (updatedUser) {
+        return res.status(200).json({ msg: 'Usuario validado' })
+      } else {
+        return res.status(500).json({ msg: 'No se pudo validar el usuario' })
+      }
     } catch (error) {
       return res.status(500).json({ msg: error.message })
     }
@@ -82,20 +80,21 @@ const validateUser = async (req, res) => {
 }
 
 const addMod = async (req, res) => {
-  //Usuario que agrega al mod (admin)
   const { id } = req.params
-  const userExist = await User.findById(id)
-  //Usuario a agregar como mod
-  const { userName } = req.body
-  const userNameExist = await User.findOne({ userName })
+  const userExist = await UserDAO.findUserById(id)
 
+  // Validar usuario que está agregando al mod
   if (!userExist) {
     return res.status(400).json({ msg: 'El usuario no está registrado' })
-  } else if (!userExist._id.toString() === req.user._id.toString()) {
+  } else if (String(userExist._id) !== req.user._id.toString()) {
     return res
       .status(400)
       .json({ msg: 'No tienes permiso para realizar esta acción' })
   } else if (await userExist.isValidated) {
+    const { userName } = req.body
+    const userNameExist = await UserDAO.findUserByField('userName', userName)
+
+    // Validar usuario que se quiere agregar como mod
     if (!userNameExist) {
       return res.status(400).json({ msg: 'El usuario no existe' })
     } else if (userNameExist.isMod) {
@@ -103,8 +102,7 @@ const addMod = async (req, res) => {
     }
     //TODO ver si el mod a agregar pertenece a la comunidad, enviar correo de invitacion
     try {
-      userNameExist.isMod = true
-      await userExist.save()
+      await UserDAO.makeUserMod(userNameExist)
       return res
         .status(200)
         .json({ msg: 'Usuario añadido al grupo de moderación' })
@@ -113,5 +111,7 @@ const addMod = async (req, res) => {
     }
   }
 }
+
+//TODO delete user??
 
 export { register, editUser, validateUser, addMod }

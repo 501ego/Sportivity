@@ -13,9 +13,8 @@ const CommunitySchema = new mongoose.Schema(
       ref: 'Forum',
     },
     activity: {
-      type: Number,
-      required: true,
-      trim: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Activity',
     },
     description: {
       type: String,
@@ -27,35 +26,39 @@ const CommunitySchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    admin: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Person',
-        required: true,
-      },
-    ],
+    admin: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     moderator: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Person',
+        ref: 'User',
       },
     ],
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Person',
+        ref: 'User',
       },
     ],
     events: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Event',
+        ref: 'User',
       },
     ],
     valoration: {
       type: Number,
       trim: true,
     },
+    requests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     timestamps: true,

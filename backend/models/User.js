@@ -65,16 +65,19 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    community: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Community',
-      default: null,
-    },
+    community: [
+      {
+        communityRef: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Community',
+        },
+        isMod: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
     isValidated: {
-      type: Boolean,
-      default: false,
-    },
-    isMod: {
       type: Boolean,
       default: false,
     },

@@ -1,21 +1,20 @@
-import User from '../../models/User.js'
 import generateJWT from '../../helpers/generateJWT.js'
 import generateId from '../../helpers/generateId.js'
+import UserDAO from '../../dao/userDAO.js'
 
 const login = async (req, res) => {
   const { email, userName, password } = req.body
-  const userExist =
-    (await User.findOne({ email })) || (await User.findOne({ userName }))
+  const userExist = await UserDAO.findUserByCredentials(email, userName)
 
   if (!userExist) {
-    return res.status(400).json({ msg: 'El usuario no está registrado' })
+    return res.error('El usuario no está registrado', 400)
   } else if (!userExist.confirmedEmail) {
     return res
       .status(400)
       .json({ msg: 'Confirma tu correo para iniciar sesión' })
   } else {
     try {
-      if (await userExist.verifyPassword(password)) {
+      if (await UserDAO.verifyPassword(userExist, password)) {
         const { _id, userName, email } = userExist
         return res.json({
           _id,
@@ -34,15 +33,13 @@ const login = async (req, res) => {
 
 const confirmEmail = async (req, res) => {
   const { token } = req.params
-  const userExist = await User.findOne({ token })
+  const userExist = await UserDAO.findUserByField('token', token)
 
   if (!userExist) {
     return res.status(400).json({ msg: 'El usuario no está registrado' })
   }
   try {
-    userExist.confirmedEmail = true
-    userExist.token = ''
-    await userExist.save()
+    await UserDAO.confirmUserEmail(userExist)
     return res.status(200).json({ msg: 'Correo confirmado' })
   } catch (error) {
     return res.status(500).json({ msg: error.message })
@@ -51,17 +48,18 @@ const confirmEmail = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   const { email, userName } = req.body
-  const userExist =
-    (await User.findOne({ email })) || (await User.findOne({ userName }))
-
+  const userExist = await UserDAO.findUserByCredentials(email, userName)
+  console.log(userExist)
   if (!userExist) {
     return res.status(400).json({ msg: 'El usuario no está registrado' })
   }
   try {
-    userExist.token = generateId()
-    await userExist.save()
-    //TODO sendEmail(user.email, user.token)
-    //TODO que el generateId() se autoelimine en 24 horas
+    const newToken = generateId()
+    await UserDAO.updateUserToken(userExist._id, newToken)
+
+    // TODO: Send email logic here. Perhaps another DAO or service function?
+    // TODO: Add logic for the token to expire in 24 hours
+
     return res.status(200).json({
       msg: 'Revisa tu email para cambiar tu contraseña',
     })
@@ -72,7 +70,7 @@ const resetPassword = async (req, res) => {
 
 const checkToken = async (req, res) => {
   const { token } = req.params
-  const userExist = await User.findOne({ token })
+  const userExist = await UserDAO.findUserByField('token', token)
   if (!userExist) {
     return res.status(400).json({ msg: 'Token inválido' })
   }
@@ -82,19 +80,17 @@ const checkToken = async (req, res) => {
 const newPassword = async (req, res) => {
   const { token } = req.params
   const { password } = req.body
-  const userExist = await User.findOne({ token })
+  const userExist = await UserDAO.findUserByField('token', token)
 
   if (!userExist) {
     return res.status(400).json({ msg: 'Token inválido' })
-  } else {
-    try {
-      userExist.password = password
-      userExist.token = ''
-      await userExist.save()
-      return res.status(200).json({ msg: 'Contraseña actualizada' })
-    } catch (error) {
-      return res.status(500).json({ msg: error.message })
-    }
+  }
+  try {
+    await UserDAO.updateUserPasswordAndResetToken(userExist, password)
+
+    return res.status(200).json({ msg: 'Contraseña actualizada' })
+  } catch (error) {
+    return res.status(500).json({ msg: error.message })
   }
 }
 
