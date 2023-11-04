@@ -1,4 +1,3 @@
-import { sendRequest } from '../controllers/community/communityController.js'
 import Community from '../models/Community.js'
 
 class CommunityDAO {
