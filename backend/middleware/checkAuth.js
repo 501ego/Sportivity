@@ -13,12 +13,12 @@ const checkAuth = async (req, res, next) => {
       req.user = await User.findById(decoded.id).select('+id +email +username')
       return next()
     } catch (error) {
-      return res.status(404).json({ msg: error.message })
+      return res.status(404).json({ msg: 'Token inválido' })
     }
   }
 
   if (!token) {
-    const error = new Error('Token inválido')
+    const error = new Error('No hay token')
     return res.status(401).json({ msg: error.message })
   }
 

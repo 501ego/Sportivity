@@ -5,6 +5,11 @@ import {
   editCommunity,
   deleteCommunity,
   addMember,
+  sendRequest,
+  deleteMember,
+  exitCommunity,
+  addModerator,
+  deleteModerator,
 } from '../controllers/community/communityController.js'
 import checkAuth from '../middleware/checkAuth.js'
 
@@ -15,5 +20,10 @@ router
   .delete(checkAuth, deleteCommunity)
 
 router.route('/addmember/:id').put(checkAuth, addMember)
+router.route('/sendrequest/:id').post(checkAuth, sendRequest)
+router.route('/deletemember/:id').put(checkAuth, deleteMember)
+router.route('/exit/:id').put(checkAuth, exitCommunity)
+router.route('/addmoderator/:id').put(checkAuth, addModerator)
+router.route('/deletemoderator/:id').put(checkAuth, deleteModerator)
 
 export default router

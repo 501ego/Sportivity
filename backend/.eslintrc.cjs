@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: 'eslint:recommended',
+  extends: ['eslint:recommended', 'prettier '],
   overrides: [
     {
       env: {
@@ -21,6 +21,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'prettier/prettier': 'off',
     semi: ['error', 'never'],
   },
 }

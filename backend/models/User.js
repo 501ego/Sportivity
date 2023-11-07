@@ -67,14 +67,8 @@ const UserSchema = new mongoose.Schema(
     },
     community: [
       {
-        communityRef: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Community',
-        },
-        isMod: {
-          type: Boolean,
-          default: false,
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Community',
       },
     ],
     isValidated: {

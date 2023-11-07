@@ -48,6 +48,42 @@ class CommunityDAO {
       throw new Error('Error al enviar la solicitud')
     }
   }
+  static async deleteMember(id, data) {
+    try {
+      const community = await Community.findById(id)
+      community.members.pull(data)
+      await community.save()
+    } catch (error) {
+      throw new Error('Error al eliminar miembro')
+    }
+  }
+  static async deleteRequest(id, data) {
+    try {
+      const community = await Community.findById(id)
+      community.requests.pull(data)
+      await community.save()
+    } catch (error) {
+      throw new Error('Error al eliminar solicitud')
+    }
+  }
+  static async addModerator(id, data) {
+    try {
+      const community = await Community.findById(id)
+      community.moderator.push(data)
+      await community.save()
+    } catch (error) {
+      throw new Error('Error al agregar moderador')
+    }
+  }
+  static async deleteModerator(id, data) {
+    try {
+      const community = await Community.findById(id)
+      community.moderator.pull(data)
+      await community.save()
+    } catch (error) {
+      throw new Error('Error al eliminar moderador')
+    }
+  }
 }
 
 export default CommunityDAO

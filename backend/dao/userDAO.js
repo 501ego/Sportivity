@@ -39,12 +39,11 @@ class UserDAO {
   }
 
   static async verifyPassword(user, password) {
-    return await user.verifyPassword(password)
-  }
-
-  static async makeUserMod(user) {
-    user.isMod = true
-    await user.save()
+    try {
+      return await user.verifyPassword(password)
+    } catch (error) {
+      return null
+    }
   }
 
   static async confirmUserEmail(user) {
@@ -65,6 +64,19 @@ class UserDAO {
       { token: newToken },
       { new: true }
     )
+  }
+
+  static async deleteUserCommunity(userId, communityId) {
+    try {
+      await User.findByIdAndUpdate(
+        userId,
+        { $pull: { community: communityId } },
+        { new: true }
+      )
+    } catch (error) {
+      console.error(error)
+      throw new Error('Error al eliminar la comunidad del usuario')
+    }
   }
 }
 

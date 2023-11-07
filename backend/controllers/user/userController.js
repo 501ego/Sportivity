@@ -61,7 +61,12 @@ const validateUser = async (req, res) => {
     return res
       .status(400)
       .json({ msg: 'No tienes permiso para realizar esta acción' })
-  } else if (await UserDAO.verifyPassword(userExist, password)) {
+  }
+  if (!(await UserDAO.verifyPassword(userExist, password))) {
+    return res.status(400).json({ msg: 'Contraseña incorrecta' })
+  } else if (await UserDAO.findUserByField('rut', rut)) {
+    return res.status(400).json({ msg: 'El RUT ya existe en la base de datos' })
+  } else {
     // TODO validar RUT (agregar funcion desde helpers/validateRut.js)
     try {
       const updatedUser = await UserDAO.updateUser(userExist._id, {
@@ -79,39 +84,6 @@ const validateUser = async (req, res) => {
   }
 }
 
-const addMod = async (req, res) => {
-  const { id } = req.params
-  const userExist = await UserDAO.findUserById(id)
-
-  // Validar usuario que está agregando al mod
-  if (!userExist) {
-    return res.status(400).json({ msg: 'El usuario no está registrado' })
-  } else if (String(userExist._id) !== req.user._id.toString()) {
-    return res
-      .status(400)
-      .json({ msg: 'No tienes permiso para realizar esta acción' })
-  } else if (await userExist.isValidated) {
-    const { userName } = req.body
-    const userNameExist = await UserDAO.findUserByField('userName', userName)
-
-    // Validar usuario que se quiere agregar como mod
-    if (!userNameExist) {
-      return res.status(400).json({ msg: 'El usuario no existe' })
-    } else if (userNameExist.isMod) {
-      return res.status(400).json({ msg: 'El usuario ya es moderador' })
-    }
-    //TODO ver si el mod a agregar pertenece a la comunidad, enviar correo de invitacion
-    try {
-      await UserDAO.makeUserMod(userNameExist)
-      return res
-        .status(200)
-        .json({ msg: 'Usuario añadido al grupo de moderación' })
-    } catch (error) {
-      return res.status(500).json({ msg: error.message })
-    }
-  }
-}
-
 //TODO delete user??
 
-export { register, editUser, validateUser, addMod }
+export { register, editUser, validateUser }
