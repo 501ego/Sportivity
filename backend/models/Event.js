@@ -4,6 +4,7 @@ const EventSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
     trim: true,
   },
   community: {
@@ -12,11 +13,15 @@ const EventSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    required: true,
-    trim: true,
+    default: Date.now(),
   },
   description: {
     type: String,
+    required: true,
+    trim: true,
+  },
+  location: {
+    type: [String],
     required: true,
     trim: true,
   },
@@ -26,11 +31,6 @@ const EventSchema = new mongoose.Schema({
       ref: 'User',
     },
   ],
-  locality: {
-    type: String,
-    required: true,
-    trim: true,
-  },
 })
 
 const Event = mongoose.model('Event', EventSchema)

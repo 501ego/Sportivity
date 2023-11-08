@@ -84,6 +84,24 @@ class CommunityDAO {
       throw new Error('Error al eliminar moderador')
     }
   }
+  static async addEvent(id, data) {
+    try {
+      const community = await Community.findById(id)
+      community.events.push(data)
+      await community.save()
+    } catch (error) {
+      throw new Error('Error al agregar evento')
+    }
+  }
+  static async deleteEvent(id, data) {
+    try {
+      const community = await Community.findById(id)
+      community.events.pull(data)
+      await community.save()
+    } catch (error) {
+      throw new Error('Error al eliminar evento')
+    }
+  }
 }
 
 export default CommunityDAO

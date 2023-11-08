@@ -170,6 +170,7 @@ const deleteMember = async (req, res) => {
     ) {
       await CommunityDAO.deleteModerator(id, userId)
     }
+    //TODO eliminar miembro del evento
     //TODO send notification to user eliminado
     return res.status(200).json({ msg: 'Miembro eliminado' })
   } catch (error) {
