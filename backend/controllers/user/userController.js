@@ -54,6 +54,7 @@ const editUser = async (req, res) => {
 const validateUser = async (req, res) => {
   const { id } = req.params
   const { rut, password } = req.body
+  //TODO validar si RUT está registrado
   const userExist = await UserDAO.findUserById(id)
   if (!userExist) {
     return res.status(400).json({ msg: 'El usuario no está registrado' })

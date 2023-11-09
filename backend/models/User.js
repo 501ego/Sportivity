@@ -5,7 +5,6 @@ const UserSchema = new mongoose.Schema(
   {
     rut: {
       type: String,
-      unique: true,
       trim: true,
     },
     userName: {
