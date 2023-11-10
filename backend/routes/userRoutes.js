@@ -5,10 +5,19 @@ import {
   editUser,
   validateUser,
 } from '../controllers/user/userController.js'
+import {
+  userNameOrEmailExist,
+  userExist,
+  userHasPermission,
+} from '../middleware/validations/userValidator.js'
 import checkAuth from '../middleware/checkAuth.js'
 
-router.route('/').post(register)
-router.route('/edituser/:id').put(checkAuth, editUser)
-router.route('/validateuser/:id').put(checkAuth, validateUser)
+router.route('/').post(userNameOrEmailExist, register)
+router
+  .route('/edituser/:id')
+  .put(checkAuth, userExist, userHasPermission, editUser)
+router
+  .route('/validateuser/:id')
+  .put(checkAuth, userExist, userHasPermission, validateUser)
 
 export default router

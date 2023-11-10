@@ -15,6 +15,7 @@ dotenv.config()
 connectDB()
 
 //Configurar cors
+/*
 const whitelist = [process.env.FRONTEND_URL]
 
 const corsOptions = {
@@ -30,7 +31,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
-
+*/
 // Routes
 app.use('/api/users', userRoutes)
 app.use('/api/account', accountRoutes)

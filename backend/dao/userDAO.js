@@ -35,7 +35,11 @@ class UserDAO {
   }
 
   static async updateUser(id, data) {
-    return await User.findByIdAndUpdate(id, data, { new: true })
+    try {
+      return await User.findByIdAndUpdate(id, data, { new: true })
+    } catch (error) {
+      return null
+    }
   }
 
   static async verifyPassword(user, password) {

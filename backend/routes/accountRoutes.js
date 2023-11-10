@@ -11,9 +11,11 @@ import {
   profile,
 } from '../controllers/user/accountController.js'
 
-router.route('/login').post(login)
+import { userExist } from '../middleware/validations/userValidator.js'
+
+router.route('/login').post(userExist, login)
 router.route('/confirm/:token').get(confirmEmail)
-router.route('/resetpassword').post(resetPassword)
+router.route('/resetpassword').post(userExist, resetPassword)
 router.route('/checktoken/:token').get(checkToken).post(newPassword)
 router.route('/profile').get(checkAuth, profile)
 
