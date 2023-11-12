@@ -17,10 +17,15 @@ class CommunityDAO {
     }
   }
 
-  static async createCommunity(data, admin) {
-    const community = new Community(data)
-    community.admin = admin
-    return await community.save()
+  static async createCommunity(data, admin, activity) {
+    try {
+      const community = new Community(data)
+      community.admin = admin
+      community.activity = activity
+      return await community.save()
+    } catch (error) {
+      throw new Error('Error al crear comunidad')
+    }
   }
   static async updateCommunity(id, data) {
     return await Community.findByIdAndUpdate(id, data, { new: true })

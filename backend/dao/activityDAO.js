@@ -20,8 +20,18 @@ class ActivityDAO {
     }
   }
   static async deleteActivity(id) {
-    return await Activity.findByIdAndDelete(id)
+    try {
+      return await Activity.findByIdAndDelete(id)
+    } catch (error) {
+      return null
+    }
+  }
+  static async findAllActivities() {
+    try {
+      return await Activity.find()
+    } catch (error) {
+      return null
+    }
   }
 }
-
 export default ActivityDAO

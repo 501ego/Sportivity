@@ -53,7 +53,7 @@ const Register = () => {
     // Validar que el password tenga al menos 8 caracteres
     if (password.length < 8) {
       setAlert({
-        msg: 'El password es muy corto, debe tener mínimo 8 caracteres',
+        msg: 'La contraseña es muy corta, debe tener mínimo 8 caracteres',
         error: true,
       })
       return
@@ -90,57 +90,47 @@ const Register = () => {
   const { msg } = alert
 
   return (
-    <section className="container mx-auto max-w-5xl">
-      <article className="my-10 bg-white shadow-lg rounded-lg p-5">
-        <h1 className="text-center text-sky-600 font-black text-6xl">
+    <section className="screen-center">
+      <article className="normal-box">
+        <h1 className="text-center text-sky-600 font-black text-5xl mt-2 mb-5">
           Registro
         </h1>
-        {msg && <Alert alert={alert} />}
-        <form className="p-10" onSubmit={handleSumbit}>
-          <div className="mb-5">
-            <label
-              className="uppercase text-gray-600 block text-xl font-bold"
-              htmlFor="userName"
-            >
-              Nombre de Usuario
+        <form className="p-5" onSubmit={handleSumbit}>
+          <div className="form-control">
+            <label className="custom-input-label" htmlFor="userName">
+              <span className="custom-input-span">Nombre de Usuario</span>
             </label>
             <input
               id="userName"
               type="text"
               placeholder="Tu nombre de usuario"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+              className="custom-input"
               value={userName}
               onChange={e => setUserName(e.target.value)}
             />
           </div>
-          <div className="mb-5">
-            <label
-              className="uppercase text-gray-600 block text-xl font-bold"
-              htmlFor="name"
-            >
-              Nombre
+          <div>
+            <label className="custom-input-label" htmlFor="name">
+              <span className="custom-input-span">Nombre</span>
             </label>
             <input
               id="name"
               type="text"
               placeholder="Tu nombre"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+              className="custom-input"
               value={name}
               onChange={e => setName(e.target.value)}
             />
           </div>
           <div className="mb-5">
-            <label
-              className="uppercase text-gray-600 block text-xl font-bold"
-              htmlFor="lastName"
-            >
-              Apellido
+            <label className="custom-input-label" htmlFor="lastName">
+              <span className="custom-input-span">Apellido</span>
             </label>
             <input
               id="lastName"
               type="text"
               placeholder="Tu apellido"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+              className="custom-input"
               value={lastName}
               onChange={e => setLastName(e.target.value)}
             />
@@ -148,7 +138,7 @@ const Register = () => {
           <div className="mb-5">
             <select
               id="country"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+              className="custom-select"
               value={country ? country : 'selectCountry'}
               onChange={e => setCountry(e.target.value)}
             >
@@ -165,7 +155,7 @@ const Register = () => {
           <div className="mb-5">
             <select
               id="region"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+              className="custom-select"
               value={region ? region : 'selectRegion'}
               onChange={e => setRegion(e.target.value)}
             >
@@ -182,7 +172,7 @@ const Register = () => {
           <div className="mb-5">
             <select
               id="city"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+              className="custom-select"
               value={city ? city : 'selectCity'}
               onChange={e => setCity(e.target.value)}
             >
@@ -196,10 +186,10 @@ const Register = () => {
               ))}
             </select>
           </div>
-          <div className="mb-5">
+          <div className="mb-1">
             <select
               id="commune"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+              className="custom-select"
               value={commune ? commune : 'selectCommune'}
               onChange={e => setCommune(e.target.value)}
             >
@@ -213,76 +203,54 @@ const Register = () => {
               ))}
             </select>
           </div>
-          <div className="mb-5">
-            <label
-              className="uppercase text-gray-600 block text-xl font-bold"
-              htmlFor="email"
-            >
-              Email
+          <div className="mb-1">
+            <label className="custom-input-label" htmlFor="email">
+              <span className="custom-input-span">Email</span>
             </label>
             <input
               id="email"
               type="email"
               placeholder="Email de registro"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+              className="custom-input"
               value={email}
               onChange={e => setEmail(e.target.value)}
             />
-            <div className="my-5">
-              <label
-                className="uppercase text-gray-600 block text-xl font-bold"
-                htmlFor="password"
-              >
-                Contraseña
+            <div className="">
+              <label className="custom-input-label" htmlFor="password">
+                <span className="custom-input-span">Contraseña</span>
               </label>
               <input
                 id="password"
                 type="password"
                 placeholder="Contraseña de registro"
-                className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                className="custom-input"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
               />
             </div>
-            <div className="my-5">
-              <label
-                className="uppercase text-gray-600 block text-xl font-bold"
-                htmlFor="password2"
-              >
-                Confirmar Contraseña
+            <div className="mb-5">
+              <label className="custom-input-label" htmlFor="password2">
+                <span className="custom-input-span">Confirmar contraseña</span>
               </label>
               <input
                 id="password2"
                 type="password"
                 placeholder="Confirmar contraseña de registro"
-                className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                className="custom-input"
                 value={password2}
                 onChange={e => setPassword2(e.target.value)}
               />
             </div>
           </div>
-          <button
-            type="submit"
-            className="bg-sky-700 w-full mb-5 py-3 text-white uppercase font-bold rounded hover:cursor-pointer hover:bg-sky-800 transition-colors"
-          >
+          <button type="submit" className="custom-auth-button">
             Registrarse
           </button>
         </form>
-      </article>
-      <nav className="lg:flex lg:justify-between">
-        <Link
-          className="block text-center my-5 text-slate-500 uppercase text-sm"
-          to="/"
-        >
+        <Link className="custom-link" to="/">
           ¿Ya tienes una cuenta? Inicia Sesión
         </Link>
-        <Link
-          className="block text-center my-5 text-slate-500 uppercase text-sm"
-          to="/forgotmypass"
-        >
-          Olvide mi Password
-        </Link>
-      </nav>
+      </article>
+      {msg && <Alert alert={alert} />}
     </section>
   )
 }

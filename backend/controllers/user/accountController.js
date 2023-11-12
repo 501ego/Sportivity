@@ -1,5 +1,4 @@
 import generateJWT from '../../helpers/generateJWT.js'
-import generateId from '../../helpers/generateId.js'
 import UserDAO from '../../dao/userDAO.js'
 
 const login = async (req, res) => {
@@ -29,14 +28,7 @@ const login = async (req, res) => {
 }
 
 const confirmEmail = async (req, res) => {
-  const { token } = req.params
-  const userExist = await UserDAO.findUserByField('token', token)
-
-  if (!userExist) {
-    return res.status(400).json({ msg: 'El usuario no está registrado' })
-  }
   try {
-    await UserDAO.confirmUserEmail(userExist)
     return res.status(200).json({ msg: 'Correo confirmado' })
   } catch (error) {
     return res.status(500).json({ msg: error.message })
@@ -46,8 +38,8 @@ const confirmEmail = async (req, res) => {
 const resetPassword = async (req, res) => {
   const userExist = req.userExist
   try {
-    const newToken = generateId()
-    await UserDAO.updateUserToken(userExist._id, newToken)
+    await UserDAO.updateUserToken(userExist)
+
     // TODO: Send email logic here. Perhaps another DAO or service function?
     // TODO: Add logic for the token to expire in 24 hours
     return res.status(200).json({
@@ -59,22 +51,16 @@ const resetPassword = async (req, res) => {
 }
 
 const checkToken = async (req, res) => {
-  const { token } = req.params
-  const userExist = await UserDAO.findUserByField('token', token)
-  if (!userExist) {
-    return res.status(400).json({ msg: 'Token inválido' })
+  try {
+    return res.status(200).json({ msg: 'Token válido' })
+  } catch (error) {
+    return res.status(500).json({ msg: error.message })
   }
-  return res.status(200).json({ msg: 'Token válido' })
 }
 
 const newPassword = async (req, res) => {
-  const { token } = req.params
   const { password } = req.body
-  const userExist = await UserDAO.findUserByField('token', token)
-
-  if (!userExist) {
-    return res.status(400).json({ msg: 'Token inválido' })
-  }
+  const userExist = req.userExist
   try {
     await UserDAO.updateUserPasswordAndResetToken(userExist, password)
     return res.status(200).json({ msg: 'Contraseña actualizada' })
@@ -85,7 +71,7 @@ const newPassword = async (req, res) => {
 
 const profile = async (req, res) => {
   const { user } = req
-  return res.status(200).json({ user })
+  return res.json(user)
 }
 
 export { login, confirmEmail, resetPassword, checkToken, newPassword, profile }

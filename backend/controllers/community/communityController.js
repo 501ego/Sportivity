@@ -1,11 +1,16 @@
 import UserDAO from '../../dao/userDAO.js'
 import CommunityDAO from '../../dao/communityDAO.js'
+import ActivityDAO from '../../dao/activityDAO.js'
 
 const createCommunity = async (req, res) => {
-  const { name } = req.body
+  const { name, activity } = req.body
   const communityExist = await CommunityDAO.findCommunityByField('name', name)
   const userAdmin = req.user._id.toString()
   const userIsValidated = await UserDAO.findUserById(userAdmin)
+  const activityExist = await ActivityDAO.findActivityByName(activity)
+  if (!activityExist) {
+    return res.status(400).json({ msg: 'La actividad no existe' })
+  }
   if (!userIsValidated.isValidated) {
     return res
       .status(400)
@@ -14,7 +19,7 @@ const createCommunity = async (req, res) => {
     return res.status(400).json({ msg: 'Nombre de comunidad no disponible' })
   } else {
     try {
-      await CommunityDAO.createCommunity(req.body, userAdmin)
+      await CommunityDAO.createCommunity(req.body, userAdmin, activityExist._id)
       return res.status(201).json({
         msg: 'Comunidad creada correctamente',
       })
@@ -230,7 +235,7 @@ const sendRequest = async (req, res) => {
       .status(200)
       .json({ msg: 'Solicitud enviada', communityId: id, userId: user })
   } catch (error) {
-    console.error(error) //TODO send notification to admin and mods
+    //TODO send notification to admin and mods
     return res
       .status(500)
       .json({ msg: 'Hubo un problema al enviar la solicitud' })

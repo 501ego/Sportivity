@@ -24,7 +24,6 @@ const CommunitySchema = new mongoose.Schema(
     rules: {
       type: String,
       required: true,
-      trim: true,
     },
     admin: {
       type: mongoose.Schema.Types.ObjectId,

@@ -62,12 +62,9 @@ class UserDAO {
     await user.save()
   }
 
-  static async updateUserToken(user, newToken) {
-    return await User.findByIdAndUpdate(
-      user._id,
-      { token: newToken },
-      { new: true }
-    )
+  static async updateUserToken(user) {
+    user.token = generateId()
+    await user.save()
   }
 
   static async deleteUserCommunity(userId, communityId) {
@@ -78,7 +75,6 @@ class UserDAO {
         { new: true }
       )
     } catch (error) {
-      console.error(error)
       throw new Error('Error al eliminar la comunidad del usuario')
     }
   }

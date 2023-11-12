@@ -3,7 +3,7 @@ import UserDAO from '../../dao/userDAO.js'
 const userExist = async (req, res, next) => {
   try {
     const { email, userName, _id } = req.body
-    const { id } = req.params
+    const { id, token } = req.params
     let user
 
     if (_id) {
@@ -12,11 +12,19 @@ const userExist = async (req, res, next) => {
       user = await UserDAO.findUserById(id)
     } else if (email || userName) {
       user = await UserDAO.findUserByCredentials(email, userName)
+    } else if (token) {
+      user = await UserDAO.findUserByField('token', token)
+
+      if (user) {
+        if (!user.confirmedEmail) {
+          await UserDAO.confirmUserEmail(user)
+        }
+      }
     } else {
       return res.status(400).json({ msg: 'Parámetros insuficientes' })
     }
     if (!user) {
-      return res.status(400).json({ msg: 'Usuario no Registrado' })
+      return res.status(400).json({ msg: 'No existe el usuario' })
     }
     req.userExist = user
     next()

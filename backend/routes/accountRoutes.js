@@ -14,9 +14,12 @@ import {
 import { userExist } from '../middleware/validations/userValidator.js'
 
 router.route('/login').post(userExist, login)
-router.route('/confirm/:token').get(confirmEmail)
+router.route('/confirm/:token').get(userExist, confirmEmail)
 router.route('/resetpassword').post(userExist, resetPassword)
-router.route('/checktoken/:token').get(checkToken).post(newPassword)
+router
+  .route('/checktoken/:token')
+  .get(userExist, checkToken)
+  .post(userExist, newPassword)
 router.route('/profile').get(checkAuth, profile)
 
 export default router
