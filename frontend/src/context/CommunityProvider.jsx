@@ -6,7 +6,10 @@ const CommunityContext = createContext()
 
 const CommunityProvider = ({ children }) => {
   const [communities, setCommunities] = useState([])
+  const [myCommunities, setMyCommunities] = useState([])
   const [alert, setAlert] = useState({})
+
+  const navigate = useNavigate()
 
   const showAlert = alert => {
     setAlert(alert)
@@ -33,6 +36,7 @@ const CommunityProvider = ({ children }) => {
         msg: data.msg,
         error: false,
       })
+      navigate('/main-page')
     } catch (error) {
       setAlert({
         msg: error.response.data.msg,
@@ -41,10 +45,61 @@ const CommunityProvider = ({ children }) => {
     }
   }
 
+  useEffect(() => {
+    const getCommunities = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          return
+        }
+        const config = {
+          headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        const { data } = await axiosClient.get(
+          '/communities/getcommunites',
+          config
+        )
+        setCommunities(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getCommunities()
+  }, [])
+
+  useEffect(() => {
+    const getMyCommunities = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          return
+        }
+        const config = {
+          headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        const { data } = await axiosClient.get(
+          '/communities/getmycommunites',
+          config
+        )
+        setMyCommunities(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getMyCommunities()
+  }, [])
+
   return (
     <CommunityContext.Provider
       value={{
         communities,
+        myCommunities,
         newCommunity,
         showAlert,
         alert,

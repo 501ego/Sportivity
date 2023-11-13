@@ -33,8 +33,8 @@ const ConfirmEmail = () => {
   const { msg } = alert
 
   return (
-    <>
-      <div className="flex-col justify-center shadow-lg px-5 py-5 rounded-xl bg-white">
+    <section className="screen-center">
+      <div className="normal-box">
         <header className="flex justify-center">
           <h1 className="text-sky-600 font-black text-5xl mb-5">
             Confirma tu cuenta
@@ -42,17 +42,14 @@ const ConfirmEmail = () => {
         </header>
         <div className="flex justify-center">
           {confirmAcount && (
-            <Link
-              className="link link-hover text-center text-slate-500 uppercase text-sm"
-              to="/"
-            >
-              Inicia Sesión
+            <Link className="custom-link" to="/">
+              <span className="text-xl">Inicia Sesión</span>
             </Link>
           )}
         </div>
       </div>
       {msg && <Alert alert={alert} />}
-    </>
+    </section>
   )
 }
 

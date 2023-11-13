@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import communesData from '../utilities/communes.json'
 import Alert from '../components/Alert.jsx'
 import axiosClient from '../config/axiosClient.jsx'
@@ -17,6 +17,8 @@ const Register = () => {
   const [password2, setPassword2] = useState('')
 
   const [alert, setAlert] = useState({})
+
+  const Navigate = useNavigate()
 
   const handleSumbit = async e => {
     // Validar que no haya campos vacios
@@ -79,6 +81,20 @@ const Register = () => {
         msg: data.msg,
         error: false,
       })
+      setUserName('')
+      setName('')
+      setLastName('')
+      setCountry('')
+      setRegion('')
+      setCity('')
+      setCommune('')
+      setEmail('')
+      setPassword('')
+      setPassword2('')
+
+      setTimeout(() => {
+        Navigate('/')
+      }, 3000)
     } catch (error) {
       setAlert({
         msg: error.response.data.msg,

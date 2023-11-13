@@ -19,13 +19,40 @@ const createCommunity = async (req, res) => {
     return res.status(400).json({ msg: 'Nombre de comunidad no disponible' })
   } else {
     try {
-      await CommunityDAO.createCommunity(req.body, userAdmin, activityExist._id)
+      await CommunityDAO.createCommunity(
+        req.body,
+        userAdmin,
+        activityExist.name
+      )
       return res.status(201).json({
         msg: 'Comunidad creada correctamente',
       })
     } catch (error) {
       return res.status(500).json({ msg: error.message })
     }
+  }
+}
+
+const getMyCommunity = async (req, res) => {
+  const user = req.user._id.toString()
+  const userExist = await UserDAO.findUserById(user)
+  if (!userExist) {
+    return res.status(400).json({ msg: 'El usuario no existe' })
+  }
+  try {
+    const communities = await CommunityDAO.getMyCommunities(user)
+    return res.status(200).json(communities)
+  } catch (error) {
+    return res.status(500).json({ msg: error.message })
+  }
+}
+
+const getCommunities = async (req, res) => {
+  try {
+    const communities = await CommunityDAO.getAllCommunities()
+    return res.status(200).json(communities)
+  } catch (error) {
+    return res.status(500).json({ msg: error.message })
   }
 }
 
@@ -323,4 +350,6 @@ export {
   exitCommunity,
   addModerator,
   deleteModerator,
+  getCommunities,
+  getMyCommunity,
 }

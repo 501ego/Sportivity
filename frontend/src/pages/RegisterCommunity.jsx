@@ -2,6 +2,7 @@ import { useState } from 'react'
 import useActivity from '../hooks/useActivity'
 import Alert from '../components/Alert.jsx'
 import useCommunity from '../hooks/useCommunity.jsx'
+import communesData from '../utilities/communes.json'
 
 const RegisterCommunity = () => {
   const [selectedActivity, setSelectedActivity] = useState('')
@@ -9,8 +10,10 @@ const RegisterCommunity = () => {
   const [description, setDescription] = useState('')
   const [rules, setRules] = useState('')
   const { activities } = useActivity()
+  const [commune, setCommune] = useState('')
 
   const { newCommunity, showAlert, alert } = useCommunity()
+
   const handleSubmit = async e => {
     e.preventDefault()
     if ([selectedActivity, name, description, rules].includes('')) {
@@ -25,6 +28,7 @@ const RegisterCommunity = () => {
       name,
       description,
       rules,
+      location: commune,
     })
   }
 
@@ -74,7 +78,7 @@ const RegisterCommunity = () => {
               onChange={e => setRules(e.target.value)}
             />
           </div>
-          <div className="mb-10">
+          <div className="mb-5">
             <label className="label">
               <span className="custom-input-label">Actividad</span>
             </label>
@@ -94,6 +98,27 @@ const RegisterCommunity = () => {
               ))}
             </select>
           </div>
+          <div className="mb-1">
+            <select
+              id="commune"
+              className="custom-select"
+              value={commune ? commune : 'selectCommune'}
+              onChange={e => setCommune(e.target.value)}
+            >
+              <option value="selectCommune" disabled hidden>
+                Seleccione una comuna
+              </option>
+              {communesData.communes.map((communeName, index) => (
+                <option key={index} value={communeName}>
+                  {communeName}
+                </option>
+              ))}
+            </select>
+          </div>
+          <input
+            type="file"
+            className="file-input file-input-ghost w-full mb-5"
+          />
           <button type="submit" className="custom-auth-button">
             Registrar comunidad
           </button>

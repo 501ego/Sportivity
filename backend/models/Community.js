@@ -13,7 +13,7 @@ const CommunitySchema = new mongoose.Schema(
       ref: 'Forum',
     },
     activity: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: 'Activity',
     },
     description: {
@@ -24,6 +24,10 @@ const CommunitySchema = new mongoose.Schema(
     rules: {
       type: String,
       required: true,
+    },
+    location: {
+      type: String,
+      trim: true,
     },
     admin: {
       type: mongoose.Schema.Types.ObjectId,

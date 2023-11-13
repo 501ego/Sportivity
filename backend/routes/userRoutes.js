@@ -16,8 +16,6 @@ router.route('/').post(userNameOrEmailExist, register)
 router
   .route('/edituser/:id')
   .put(checkAuth, userExist, userHasPermission, editUser)
-router
-  .route('/validateuser/:id')
-  .put(checkAuth, userExist, userHasPermission, validateUser)
+router.route('/validateuser').put(checkAuth, validateUser)
 
 export default router

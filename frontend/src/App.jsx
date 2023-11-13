@@ -11,6 +11,10 @@ import ConfirmEmail from './pages/ConfirmEmail'
 import NewPassword from './pages/NewPassword'
 import MainPage from './pages/MainPage'
 import RegisterCommunity from './pages/RegisterCommunity'
+import UpgradeUser from './pages/UpgradeUser'
+import MyCommunities from './pages/MyCommunities'
+import Community from './pages/Community'
+import NewEvent from './pages/NewEvent'
 
 function App() {
   return (
@@ -32,6 +36,10 @@ function App() {
                   path="register-community"
                   element={<RegisterCommunity />}
                 />
+                <Route path="community/:id" element={<Community />} />
+                <Route path="upgrade-user" element={<UpgradeUser />} />
+                <Route path="my-communities" element={<MyCommunities />} />
+                <Route path="community/:id/new-event" element={<NewEvent />} />
               </Route>
             </Routes>
           </CommunityProvider>

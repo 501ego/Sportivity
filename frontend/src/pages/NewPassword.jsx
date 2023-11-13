@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import axiosClient from '../config/axiosClient'
 import Alert from '../components/Alert'
+import { useNavigate } from 'react-router-dom'
 
 const NewPassword = () => {
   const [password, setPassword] = useState('')
@@ -9,6 +10,8 @@ const NewPassword = () => {
   const [passwordModified, setPasswordModified] = useState(false)
   const [tokenValid, setTokenValid] = useState(false)
   const [alert, setAlert] = useState({})
+
+  const Navigate = useNavigate()
 
   const { token } = useParams()
 
@@ -60,6 +63,8 @@ const NewPassword = () => {
         error: false,
       })
       setPasswordModified(true)
+
+      Navigate('/')
     } catch (error) {
       setAlert({
         msg: error.response.data.msg,

@@ -10,6 +10,8 @@ import {
   exitCommunity,
   addModerator,
   deleteModerator,
+  getCommunities,
+  getMyCommunity,
 } from '../controllers/community/communityController.js'
 import checkAuth from '../middleware/checkAuth.js'
 
@@ -18,7 +20,8 @@ router
   .route('/:id')
   .put(checkAuth, editCommunity)
   .delete(checkAuth, deleteCommunity)
-
+router.route('/getcommunites').get(checkAuth, getCommunities)
+router.route('/getmycommunites').get(checkAuth, getMyCommunity)
 router.route('/addmember/:id').put(checkAuth, addMember)
 router.route('/sendrequest/:id').post(checkAuth, sendRequest)
 router.route('/deletemember/:id').put(checkAuth, deleteMember)

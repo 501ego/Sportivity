@@ -19,6 +19,8 @@ const userExist = async (req, res, next) => {
         if (!user.confirmedEmail) {
           await UserDAO.confirmUserEmail(user)
         }
+      } else {
+        return res.status(400).json({ msg: 'No existe el usuario' })
       }
     } else {
       return res.status(400).json({ msg: 'Parámetros insuficientes' })

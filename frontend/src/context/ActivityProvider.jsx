@@ -18,7 +18,7 @@ const ActivityProvider = ({ children }) => {
     }
 
     viewActivities()
-  })
+  }, [])
 
   return (
     <ActivityContext.Provider

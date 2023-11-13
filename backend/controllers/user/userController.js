@@ -35,7 +35,10 @@ const validateUser = async (req, res) => {
   const { rut, password } = req.body
   //TODO validar si RUT está registrado
 
-  const userExist = req.userExist
+  const userExist = req.user
+
+  if (userExist.isValidated)
+    return res.status(400).json({ msg: 'El usuario ya está validado' })
   if (!(await UserDAO.verifyPassword(userExist, password))) {
     return res.status(400).json({ msg: 'Contraseña incorrecta' })
   } else if (await UserDAO.findUserByField('rut', rut)) {

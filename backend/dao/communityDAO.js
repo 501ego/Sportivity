@@ -17,6 +17,24 @@ class CommunityDAO {
     }
   }
 
+  static async getMyCommunities(id) {
+    try {
+      return await Community.find({
+        $or: [{ admin: id }, { members: id }, { moderator: id }],
+      })
+    } catch (error) {
+      return null
+    }
+  }
+
+  static async getAllCommunities() {
+    try {
+      return await Community.find()
+    } catch (error) {
+      return null
+    }
+  }
+
   static async createCommunity(data, admin, activity) {
     try {
       const community = new Community(data)

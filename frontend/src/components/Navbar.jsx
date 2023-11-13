@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 const NavBar = () => {
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-zinc-900">
       <div className="dropdown">
         <label tabIndex={0}>
           <div className="btn btn-square btn-ghost">
@@ -26,10 +26,13 @@ const NavBar = () => {
           className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
         >
           <li>
-            <a>Item 1</a>
+            <Link to="/upgrade-user">Validar Usuario</Link>
           </li>
           <li>
-            <a>Item 2</a>
+            <Link to="/register-community">Crear Comunidad</Link>
+          </li>
+          <li>
+            <Link to="/my-communities">Mis Comunidades</Link>
           </li>
         </ul>
       </div>
