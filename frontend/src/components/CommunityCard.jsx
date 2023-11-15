@@ -1,41 +1,43 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axiosClient from '../config/axiosClient'
+import Alert from './Alert'
 
 const CommunityCard = ({ community }) => {
+  const [alert, setAlert] = useState({})
   const handleJoin = async () => {
     //TODO implementar en provider
     try {
       const communityId = community._id
       const token = localStorage.getItem('token')
-      console.log('token', token)
-      console.log('communityId', communityId)
-
       if (!token) {
-        console.error('No hay token disponible')
         return
       }
-
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          'content-type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
-
-      const { data } = await axiosClient.post(
+      console.log(token)
+      const { data } = await axiosClient.get(
         `/communities/sendrequest/${communityId}`,
         config
       )
 
-      console.log('Solicitud enviada con éxito:', data)
+      setAlert({
+        msg: data.msg,
+        error: false,
+      })
     } catch (error) {
-      console.error(
-        'Error al enviar la solicitud:',
-        error.response ? error.response.data : error.message
-      )
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      })
     }
   }
 
+  const { msg } = alert
   return (
     <section className="container bg-zinc-50 rounded-md shadow-md shadow-zinc-600 max-w-xl p-2 flex flex-col items-center mt-5">
       <figure></figure>
@@ -67,6 +69,7 @@ const CommunityCard = ({ community }) => {
           <span className="font-semibold text-base">{community.activity}</span>
         </div>
       </div>
+      {msg && <Alert alert={alert} />}
     </section>
   )
 }

@@ -48,7 +48,7 @@ const Login = () => {
     <section className="screen-center">
       {msg && <Alert alert={alert} />}
       <article className="normal-box">
-        <h1 className="text-center text-sky-600 font-black text-5xl mt-2 mb-5">
+        <h1 className="text-center text-accent font-black text-5xl mt-2 mb-5">
           Inicia sesión <br />
           <span className="text-slate-700 font-semibold text-4xl">
             Encuentra tu comunidad

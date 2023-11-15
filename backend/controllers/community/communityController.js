@@ -358,6 +358,32 @@ const deleteModerator = async (req, res) => {
     return res.status(500).json({ msg: error.message })
   }
 }
+const getCommunityByName = async (req, res) => {
+  const { name } = req.params
+
+  try {
+    const allCommunities = await CommunityDAO.getAllCommunities()
+
+    if (!name.trim()) {
+      return res.status(200).json(allCommunities)
+    }
+
+    const filteredCommunities = allCommunities.filter(community =>
+      community.name.toLowerCase().includes(name.toLowerCase())
+    )
+
+    if (filteredCommunities.length === 0) {
+      return res
+        .status(404)
+        .json({ msg: 'No se encontraron comunidades con ese nombre' })
+    }
+
+    return res.status(200).json(filteredCommunities)
+  } catch (error) {
+    return res.status(500).json({ msg: error.message })
+  }
+}
+
 export {
   createCommunity,
   editCommunity,
@@ -371,4 +397,5 @@ export {
   getCommunities,
   getMyCommunity,
   getCommunityById,
+  getCommunityByName,
 }

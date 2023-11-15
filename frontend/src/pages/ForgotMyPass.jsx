@@ -38,7 +38,7 @@ const ForgotMyPass = () => {
   return (
     <section className="screen-center">
       <article className="normal-box">
-        <h1 className="text-sky-600 font-black text-5xl text-center">
+        <h1 className="text-accent font-black text-5xl text-center">
           Recupera tu contraseña
         </h1>
 

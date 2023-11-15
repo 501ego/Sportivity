@@ -76,7 +76,7 @@ const NewPassword = () => {
   return (
     <section className="screen-center">
       <div className="normal-box">
-        <h1 className="text-sky-600 font-black text-5xl text-center mb-2">
+        <h1 className="text-accent font-black text-5xl text-center mb-2">
           Restablece tu Password
         </h1>
 

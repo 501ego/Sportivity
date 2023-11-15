@@ -23,7 +23,7 @@ const Community = () => {
             src="../../../public/img/location.png"
             className="h-[40px] w-[50px]"
           />
-          <h2 className="text-start upper text-sky-700 font-black text-4xl mt-2">
+          <h2 className="text-start upper text-accent font-black text-4xl mt-2">
             {community.location}.
           </h2>
         </div>
@@ -43,6 +43,11 @@ const Community = () => {
             <div className=" text-zinc-700 text-2xl mb-5 mt-5">
               <RulesComponent rules={community.rules} />
             </div>
+          </div>
+          <div className="flex flex-row justify-center gap-4 mt-5">
+            <button className="btn btn-accent w-full max-w-xs rounded-xl text-lg">
+              <Link to="new-event">Crear evento</Link>
+            </button>
           </div>
         </article>
       </div>

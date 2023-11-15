@@ -64,7 +64,7 @@ const UpgradeUser = () => {
   return (
     <section className="screen-center">
       <article className="normal-box">
-        <h1 className="text-center text-sky-600 font-black text-5xl mt-2 mb-5">
+        <h1 className="text-center text-accent font-black text-5xl mt-2 mb-5">
           Haste Admin y crea tus comunidades
         </h1>
         <form className="p-5" onSubmit={handleSumbit}>

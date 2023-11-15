@@ -9,6 +9,7 @@ const CommunityProvider = ({ children }) => {
   const [myCommunities, setMyCommunities] = useState([])
   const [community, setCommunity] = useState({})
   const [alert, setAlert] = useState({})
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
 
@@ -20,7 +21,7 @@ const CommunityProvider = ({ children }) => {
   }
 
   const submitCommmunity = async community => {
-    if (community._id) {
+    if (community.id) {
       await editCommunity(community)
     } else {
       await newCommunity(community)
@@ -40,7 +41,7 @@ const CommunityProvider = ({ children }) => {
         },
       }
       const { data } = await axiosClient.put(
-        `/communities/${community._id}`,
+        `/communities/${community.id}`,
         community,
         config
       )
@@ -54,7 +55,10 @@ const CommunityProvider = ({ children }) => {
         msg: data.msg,
         error: false,
       })
-      navigate('main')
+      setTimeout(() => {
+        setAlert({})
+        navigate('/main')
+      }, 3000)
     } catch (error) {
       setAlert({
         msg: error.response.data.msg,
@@ -141,6 +145,7 @@ const CommunityProvider = ({ children }) => {
   }, [])
 
   const getCommunity = async id => {
+    setLoading(true)
     try {
       const token = localStorage.getItem('token')
       if (!token) {
@@ -160,6 +165,54 @@ const CommunityProvider = ({ children }) => {
     } catch (error) {
       console.log(error)
     }
+    setLoading(false)
+  }
+
+  const searchCommunity = async search => {
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        console.error('No se encontró el token')
+        return
+      }
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const { data } = await axiosClient.get(
+        `/communities/search/${search}`,
+        config
+      )
+      setCommunities(data)
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        try {
+          const token = localStorage.getItem('token')
+          if (!token) {
+            return
+          }
+          const config = {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          }
+          const { data } = await axiosClient.get(
+            '/communities/getcommunites',
+            config
+          )
+          setCommunities(data)
+        } catch (error) {
+          console.error('Error al obtener todas las comunidades:', error)
+        }
+      } else {
+        console.error('Error al realizar la búsqueda:', error)
+      }
+    }
   }
 
   return (
@@ -170,7 +223,9 @@ const CommunityProvider = ({ children }) => {
         submitCommmunity,
         getCommunity,
         showAlert,
+        searchCommunity,
         community,
+        loading,
         alert,
       }}
     >

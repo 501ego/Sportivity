@@ -36,7 +36,7 @@ const ConfirmEmail = () => {
     <section className="screen-center">
       <div className="normal-box">
         <header className="flex justify-center">
-          <h1 className="text-sky-600 font-black text-5xl mb-5">
+          <h1 className="text-accent font-black text-5xl mb-5">
             Confirma tu cuenta
           </h1>
         </header>

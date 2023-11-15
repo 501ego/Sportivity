@@ -16,6 +16,8 @@ import UpgradeUser from './pages/UpgradeUser'
 import MyCommunities from './pages/MyCommunities'
 import Community from './pages/Community'
 import NewEvent from './pages/NewEvent'
+import EditCommunity from './pages/EditCommunity'
+import { NotificationProvider } from './context/NotificationProvider'
 
 function App() {
   return (
@@ -24,37 +26,45 @@ function App() {
         <ActivityProvider>
           <CommunityProvider>
             <EventProvider>
-              <Routes>
-                <Route path="/" element={<AuthLayout />}>
-                  <Route index element={<Login />} />
-                  <Route path="register" element={<Register />} />
-                  <Route path="forgotmypass" element={<ForgotMyPass />} />
-                  <Route path="new-password/:token" element={<NewPassword />} />
-                  <Route path="confirm-email/:id" element={<ConfirmEmail />} />
-                </Route>
-                <Route path="/main" element={<SecureRoute />}>
-                  <Route index element={<MainPage />} />
-                  <Route
-                    path="register-community"
-                    element={<RegisterCommunity />}
-                  />
-                  <Route path="community/:id" element={<Community />} />
-                  <Route path="upgrade-user" element={<UpgradeUser />} />
-                  <Route path="my-communities" element={<MyCommunities />} />
-                  <Route
-                    path="my-communities/community/:id"
-                    element={<Community />}
-                  />
-                  <Route
-                    path="community/:id/edit"
-                    element={<RegisterCommunity />}
-                  />
-                  <Route
-                    path="community/:id/new-event"
-                    element={<NewEvent />}
-                  />
-                </Route>
-              </Routes>
+              <NotificationProvider>
+                <Routes>
+                  <Route path="/" element={<AuthLayout />}>
+                    <Route index element={<Login />} />
+                    <Route path="register" element={<Register />} />
+                    <Route path="forgotmypass" element={<ForgotMyPass />} />
+                    <Route
+                      path="new-password/:token"
+                      element={<NewPassword />}
+                    />
+                    <Route
+                      path="confirm-email/:id"
+                      element={<ConfirmEmail />}
+                    />
+                  </Route>
+                  <Route path="/main" element={<SecureRoute />}>
+                    <Route index element={<MainPage />} />
+                    <Route
+                      path="register-community"
+                      element={<RegisterCommunity />}
+                    />
+                    <Route path="community/:id" element={<Community />} />
+                    <Route path="upgrade-user" element={<UpgradeUser />} />
+                    <Route path="my-communities" element={<MyCommunities />} />
+                    <Route
+                      path="my-communities/community/:id"
+                      element={<Community />}
+                    />
+                    <Route
+                      path="community/:id/edit"
+                      element={<EditCommunity />}
+                    />
+                    <Route
+                      path="community/:id/new-event"
+                      element={<NewEvent />}
+                    />
+                  </Route>
+                </Routes>
+              </NotificationProvider>
             </EventProvider>
           </CommunityProvider>
         </ActivityProvider>

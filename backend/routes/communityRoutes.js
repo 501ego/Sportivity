@@ -13,6 +13,7 @@ import {
   getCommunities,
   getMyCommunity,
   getCommunityById,
+  getCommunityByName,
 } from '../controllers/community/communityController.js'
 import checkAuth from '../middleware/checkAuth.js'
 
@@ -24,11 +25,12 @@ router
 router.route('/getcommunites').get(checkAuth, getCommunities)
 router.route('/getmycommunites').get(checkAuth, getMyCommunity)
 router.route('/addmember/:id').put(checkAuth, addMember)
-router.route('/sendrequest/:id').post(checkAuth, sendRequest)
+router.route('/sendrequest/:id').get(checkAuth, sendRequest)
 router.route('/deletemember/:id').put(checkAuth, deleteMember)
 router.route('/exit/:id').put(checkAuth, exitCommunity)
 router.route('/addmoderator/:id').put(checkAuth, addModerator)
 router.route('/deletemoderator/:id').put(checkAuth, deleteModerator)
 router.route('/community/:id').get(checkAuth, getCommunityById)
+router.route('/search/:name').get(checkAuth, getCommunityByName)
 
 export default router

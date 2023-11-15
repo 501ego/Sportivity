@@ -14,7 +14,7 @@ const MyCommunities = () => {
             </div>
           ))
         ) : (
-          <h1 className="text-center text-sky-600 font-black text-5xl mt-2 mb-5">
+          <h1 className="text-center text-accent font-black text-5xl mt-2 mb-5">
             No hay comunidades
           </h1>
         )}
