@@ -32,7 +32,8 @@ const Login = () => {
       setAuth(data)
       setEmail('')
       setPassword('')
-      navigate('/main-page')
+      navigate('/main')
+      window.location.reload()
     } catch (error) {
       setAlert({
         msg: error.response.data.msg,

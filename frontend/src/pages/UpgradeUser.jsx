@@ -52,7 +52,7 @@ const UpgradeUser = () => {
         error: false,
       })
 
-      Navigate('/main-page')
+      Navigate('/main')
     } catch (error) {
       setAlert({
         msg: error.response.data.msg,

@@ -26,18 +26,18 @@ const NavBar = () => {
           className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
         >
           <li>
-            <Link to="/upgrade-user">Validar Usuario</Link>
+            <Link to="upgrade-user">Validar Usuario</Link>
           </li>
           <li>
-            <Link to="/register-community">Crear Comunidad</Link>
+            <Link to="register-community">Crear Comunidad</Link>
           </li>
           <li>
-            <Link to="/my-communities">Mis Comunidades</Link>
+            <Link to="my-communities">Mis Comunidades</Link>
           </li>
         </ul>
       </div>
       <div className="flex-1">
-        <Link className="btn btn-ghost normal-case text-xl" to="/main-page">
+        <Link className="btn btn-ghost normal-case text-xl" to="">
           Inicio
         </Link>
       </div>

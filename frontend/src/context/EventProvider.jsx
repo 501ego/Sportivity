@@ -1,5 +1,4 @@
 import { useState, useEffect, createContext } from 'react'
-import { useNavigate } from 'react-router-dom'
 import axiosClient from '../config/axiosClient'
 
 const EventContext = createContext()
@@ -8,8 +7,6 @@ const EventProvider = ({ children }) => {
   const [events, setEvents] = useState([])
   const [alert, setAlert] = useState({})
 
-  const navigate = useNavigate()
-
   const showAlert = alert => {
     setAlert(alert)
     setTimeout(() => {
@@ -17,7 +14,7 @@ const EventProvider = ({ children }) => {
     }, 3000)
   }
 
-  const newEvent = async event => {
+  const newEvent = async (event, id) => {
     try {
       const token = localStorage.getItem('token')
       if (!token) {
@@ -30,7 +27,7 @@ const EventProvider = ({ children }) => {
         },
       }
 
-      const { data } = await axiosClient.post('/:id', event, config)
+      const { data } = await axiosClient.post(`/events/${id}`, event, config)
       setEvents([...events, data])
       setAlert({
         msg: data.msg,
@@ -44,5 +41,18 @@ const EventProvider = ({ children }) => {
     }
   }
 
-  return <EventContext.Provider value={{}}>{children}</EventContext.Provider>
+  return (
+    <EventContext.Provider
+      value={{
+        newEvent,
+        showAlert,
+        alert,
+      }}
+    >
+      {children}
+    </EventContext.Provider>
+  )
 }
+
+export { EventProvider }
+export default EventContext

@@ -12,6 +12,7 @@ import {
   deleteModerator,
   getCommunities,
   getMyCommunity,
+  getCommunityById,
 } from '../controllers/community/communityController.js'
 import checkAuth from '../middleware/checkAuth.js'
 
@@ -28,5 +29,6 @@ router.route('/deletemember/:id').put(checkAuth, deleteMember)
 router.route('/exit/:id').put(checkAuth, exitCommunity)
 router.route('/addmoderator/:id').put(checkAuth, addModerator)
 router.route('/deletemoderator/:id').put(checkAuth, deleteModerator)
+router.route('/community/:id').get(checkAuth, getCommunityById)
 
 export default router

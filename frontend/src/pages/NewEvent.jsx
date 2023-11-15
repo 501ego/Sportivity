@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { useParams, Link } from 'react-router-dom'
 import CommunesData from '../utilities/communes.json'
+import useEvent from '../hooks/useEvent'
 import Alert from '../components/Alert'
 
 const NewEvent = () => {
@@ -8,17 +10,28 @@ const NewEvent = () => {
   const [description, setDescription] = useState('')
   const [commune, setCommune] = useState('')
 
-  const [alert, setAlert] = useState({})
+  const { newEvent, showAlert, alert } = useEvent()
 
-  const handleSumbit = e => {
+  const { id } = useParams()
+  console.log(id)
+  const handleSumbit = async e => {
     e.preventDefault()
     if ([name, date, description, commune].includes('')) {
-      setAlert({
+      showAlert({
         msg: 'Todos los campos son obligatorios',
         error: true,
       })
       return
     }
+    await newEvent(
+      {
+        name,
+        date,
+        description,
+        location: commune,
+      },
+      id
+    )
   }
 
   const { msg } = alert

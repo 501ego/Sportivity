@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import useActivity from '../hooks/useActivity'
 import Alert from '../components/Alert.jsx'
 import useCommunity from '../hooks/useCommunity.jsx'
 import communesData from '../utilities/communes.json'
 
 const RegisterCommunity = () => {
+  const [id, setId] = useState('')
   const [selectedActivity, setSelectedActivity] = useState('')
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -12,7 +14,22 @@ const RegisterCommunity = () => {
   const { activities } = useActivity()
   const [commune, setCommune] = useState('')
 
-  const { newCommunity, showAlert, alert } = useCommunity()
+  const params = useParams()
+
+  const { submitCommmunity, showAlert, alert, community, getCommunity } =
+    useCommunity()
+
+  useEffect(() => {
+    if (params.id) {
+      getCommunity(params.id)
+      setId(community._id)
+      setName(community.name)
+      setDescription(community.description)
+      setRules(community.rules)
+      setSelectedActivity(community.activity)
+      setCommune(community.location)
+    }
+  }, [params])
 
   const handleSubmit = async e => {
     e.preventDefault()
@@ -23,13 +40,21 @@ const RegisterCommunity = () => {
       })
       return
     }
-    await newCommunity({
+    await submitCommmunity({
+      id,
       activity: selectedActivity,
       name,
       description,
       rules,
       location: commune,
     })
+
+    setId(null)
+    setName('')
+    setDescription('')
+    setRules('')
+    setSelectedActivity('')
+    setCommune('')
   }
 
   const { msg } = alert
@@ -38,7 +63,7 @@ const RegisterCommunity = () => {
     <section className="container mx-auto max-w-2xl h-[calc(90vh)] items-center justify-center flex p-2">
       <article className="normal-box">
         <h1 className="text-center text-sky-600 font-black text-5xl mt-2 mb-5">
-          Registra tu comunidad
+          {id ? 'Actualizar comunidad' : 'Registra tu comunidad'}
         </h1>
         <form className="p-5" onSubmit={handleSubmit}>
           <div className="form-control">
@@ -120,7 +145,7 @@ const RegisterCommunity = () => {
             className="file-input file-input-ghost w-full mb-5"
           />
           <button type="submit" className="custom-auth-button">
-            Registrar comunidad
+            {id ? 'Actualizar comunidad' : 'Registrar comunidad'}
           </button>
         </form>
       </article>

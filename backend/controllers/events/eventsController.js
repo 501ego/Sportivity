@@ -13,9 +13,7 @@ const createEvent = async (req, res) => {
   }
 
   if (community.admin.toString() !== req.user._id.toString()) {
-    return res
-      .status(403)
-      .json({ message: 'No tienes permiso para crear eventos' })
+    return res.status(403).json({ msg: 'No tienes permiso para crear eventos' })
   }
 
   if (eventExists) {
@@ -33,9 +31,9 @@ const createEvent = async (req, res) => {
 
     const newEvent = await EventDAO.createEvent(event)
     await CommunityDAO.addEvent(community._id, newEvent._id)
-    res.status(201).json({ message: 'Evento creado' })
+    res.status(201).json({ msg: 'Evento creado' })
   } catch (error) {
-    res.status(500).json({ message: 'Error al crear evento', error })
+    res.status(500).json({ msg: 'Error al crear evento', error })
   }
 }
 

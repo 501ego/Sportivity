@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthProvider'
 import { ActivityProvider } from './context/ActivityProvider'
 import { CommunityProvider } from './context/CommunityProvider'
+import { EventProvider } from './context/EventProvider'
 import SecureRoute from './layouts/SecureRoute'
 import Register from './pages/Register'
 import Login from './pages/Login'
@@ -22,26 +23,39 @@ function App() {
       <AuthProvider>
         <ActivityProvider>
           <CommunityProvider>
-            <Routes>
-              <Route path="/" element={<AuthLayout />}>
-                <Route index element={<Login />} />
-                <Route path="register" element={<Register />} />
-                <Route path="forgotmypass" element={<ForgotMyPass />} />
-                <Route path="new-password/:token" element={<NewPassword />} />
-                <Route path="confirm-email/:id" element={<ConfirmEmail />} />
-              </Route>
-              <Route element={<SecureRoute />}>
-                <Route path="/main-page" index element={<MainPage />} />
-                <Route
-                  path="register-community"
-                  element={<RegisterCommunity />}
-                />
-                <Route path="community/:id" element={<Community />} />
-                <Route path="upgrade-user" element={<UpgradeUser />} />
-                <Route path="my-communities" element={<MyCommunities />} />
-                <Route path="community/:id/new-event" element={<NewEvent />} />
-              </Route>
-            </Routes>
+            <EventProvider>
+              <Routes>
+                <Route path="/" element={<AuthLayout />}>
+                  <Route index element={<Login />} />
+                  <Route path="register" element={<Register />} />
+                  <Route path="forgotmypass" element={<ForgotMyPass />} />
+                  <Route path="new-password/:token" element={<NewPassword />} />
+                  <Route path="confirm-email/:id" element={<ConfirmEmail />} />
+                </Route>
+                <Route path="/main" element={<SecureRoute />}>
+                  <Route index element={<MainPage />} />
+                  <Route
+                    path="register-community"
+                    element={<RegisterCommunity />}
+                  />
+                  <Route path="community/:id" element={<Community />} />
+                  <Route path="upgrade-user" element={<UpgradeUser />} />
+                  <Route path="my-communities" element={<MyCommunities />} />
+                  <Route
+                    path="my-communities/community/:id"
+                    element={<Community />}
+                  />
+                  <Route
+                    path="community/:id/edit"
+                    element={<RegisterCommunity />}
+                  />
+                  <Route
+                    path="community/:id/new-event"
+                    element={<NewEvent />}
+                  />
+                </Route>
+              </Routes>
+            </EventProvider>
           </CommunityProvider>
         </ActivityProvider>
       </AuthProvider>

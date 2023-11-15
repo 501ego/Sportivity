@@ -47,10 +47,28 @@ const getMyCommunity = async (req, res) => {
   }
 }
 
+const getCommunityById = async (req, res) => {
+  const { id } = req.params
+  const communityExist = await CommunityDAO.findCommunityById(id)
+  if (!communityExist) {
+    return res.status(400).json({ msg: 'La comunidad no existe' })
+  }
+  try {
+    const admin = await UserDAO.findUserById(communityExist.admin.toString())
+    const community = {
+      ...communityExist._doc,
+      admin: `${admin.name} ${admin.lastName}`,
+    }
+    return res.status(200).json(community)
+  } catch (error) {
+    return res.status(500).json({ msg: error.message })
+  }
+}
+
 const getCommunities = async (req, res) => {
   try {
     const communities = await CommunityDAO.getAllCommunities()
-    return res.status(200).json(communities)
+    return res.json(communities)
   } catch (error) {
     return res.status(500).json({ msg: error.message })
   }
@@ -352,4 +370,5 @@ export {
   deleteModerator,
   getCommunities,
   getMyCommunity,
+  getCommunityById,
 }
