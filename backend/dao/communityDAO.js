@@ -1,6 +1,17 @@
 import Community from '../models/Community.js'
 
 class CommunityDAO {
+
+  static async findCommunityByIdPopulate(communityId) {
+    try {
+      return await Community.findById(communityId)
+        .populate('admin')
+        .populate('requests')
+    } catch (error) {
+      return null
+    }
+  }
+
   static async findCommunityByField(field, value) {
     try {
       return await Community.findOne({ [field]: value })

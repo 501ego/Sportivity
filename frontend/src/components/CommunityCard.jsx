@@ -1,40 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import axiosClient from '../config/axiosClient'
+import useCommunity from '../hooks/useCommunity'
 import Alert from './Alert'
 
 const CommunityCard = ({ community }) => {
-  const [alert, setAlert] = useState({})
+  const { sendRequest, getRequests, alert } = useCommunity()
   const handleJoin = async () => {
-    //TODO implementar en provider
-    try {
-      const communityId = community._id
-      const token = localStorage.getItem('token')
-      if (!token) {
-        return
-      }
-      const config = {
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-      console.log(token)
-      const { data } = await axiosClient.get(
-        `/communities/sendrequest/${communityId}`,
-        config
-      )
-
-      setAlert({
-        msg: data.msg,
-        error: false,
-      })
-    } catch (error) {
-      setAlert({
-        msg: error.response.data.msg,
-        error: true,
-      })
-    }
+    await sendRequest(community._id)
   }
 
   const { msg } = alert

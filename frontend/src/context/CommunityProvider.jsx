@@ -9,6 +9,7 @@ const CommunityProvider = ({ children }) => {
   const [myCommunities, setMyCommunities] = useState([])
   const [community, setCommunity] = useState({})
   const [alert, setAlert] = useState({})
+  const [requests, setRequests] = useState([])
   const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
@@ -215,6 +216,66 @@ const CommunityProvider = ({ children }) => {
     }
   }
 
+  const sendRequest = async id => {
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        return
+      }
+      const config = {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      const { data } = await axiosClient.get(
+        `/communities/sendrequest/${id}`,
+        config
+      )
+
+      setAlert({
+        msg: data.msg,
+        error: false,
+      })
+      setTimeout(() => {
+        setAlert({})
+      }, 3000)
+    } catch (error) {
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      })
+      setTimeout(() => {
+        setAlert({})
+      }, 3000)
+    }
+  }
+
+  useEffect(() => {
+    const getRequests = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          return
+        }
+        const config = {
+          headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        const { data } = await axiosClient.get(
+          `/communities/getrequests/${id}`,
+          config
+        )
+        setRequests(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getRequests()
+  }, [])
+
   return (
     <CommunityContext.Provider
       value={{
@@ -227,6 +288,8 @@ const CommunityProvider = ({ children }) => {
         community,
         loading,
         alert,
+        sendRequest,
+        getRequests,
       }}
     >
       {children}

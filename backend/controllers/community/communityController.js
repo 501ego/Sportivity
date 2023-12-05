@@ -288,6 +288,32 @@ const sendRequest = async (req, res) => {
   //TODO ver cómo el admin o el mod reciben la solicitud con la id del miembro 8==3
 }
 
+const getRequests = async (req, res) => {
+  const { id } = req.params
+  const userAdmin = req.user._id.toString()
+  const communityExist = await CommunityDAO.findCommunityByIdPopulate(id)
+  if (!communityExist) {
+    return res.status(400).json({ msg: 'La comunidad no existe' })
+  }
+  if (communityExist.admin._id.toString() !== userAdmin) {
+    return res.status(400).json({ msg: 'No tienes permiso para ver solicitudes' })
+  }
+  try {
+    const requests = communityExist.requests.map(request => {
+      return {
+        communityExistName: communityExist.name,
+        userId: request._id,
+        name: request.name,
+        lastName: request.lastName,
+        email: request.email,
+      }
+    })
+    return res.status(200).json(requests)
+  } catch (error) {
+    return res.status(500).json({ msg: error.message })
+  }
+}
+
 const addModerator = async (req, res) => {
   const { id } = req.params
   const userAdmin = req.user._id.toString()
@@ -398,4 +424,5 @@ export {
   getMyCommunity,
   getCommunityById,
   getCommunityByName,
+  getRequests,
 }
