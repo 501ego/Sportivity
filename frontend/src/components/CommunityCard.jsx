@@ -9,17 +9,20 @@ const CommunityCard = ({ community }) => {
     await sendRequest(community._id)
   }
 
+  useEffect(() => {
+    getRequests(community._id)
+  }, [])
+
   const { msg } = alert
   return (
     <section className="container bg-zinc-50 rounded-md shadow-md shadow-zinc-600 max-w-xl p-2 flex flex-col items-center mt-5">
-      <figure></figure>
-      <article className="card-body">
+      <article className="card-body flex flex-col w-full">
         <Link to={`community/${community._id}`}>
           <h2 className="card-title text-4xl font-black text-zinc-800 mb-2">
             {community.name}
           </h2>
           <div className="min-h-[175px] max-h-[175px] overflow-hidden">
-            <p className="text-base text-zinc-700 font-semibold">
+            <p className="text-base text-zinc-700 font-semibold  xs:min-w-[500px]">
               {community.description}
             </p>
           </div>

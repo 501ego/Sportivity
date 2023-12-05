@@ -251,30 +251,28 @@ const CommunityProvider = ({ children }) => {
     }
   }
 
-  useEffect(() => {
-    const getRequests = async () => {
-      try {
-        const token = localStorage.getItem('token')
-        if (!token) {
-          return
-        }
-        const config = {
-          headers: {
-            'content-type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-        const { data } = await axiosClient.get(
-          `/communities/getrequests/${id}`,
-          config
-        )
-        setRequests(data)
-      } catch (error) {
-        console.log(error)
+  const getRequests = async id => {
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        return
       }
+      const config = {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      const { data } = await axiosClient.get(
+        `/communities/getrequests/${id}`,
+        config
+      )
+      setRequests(data)
+      console.log(data)
+    } catch (error) {
+      console.log(error)
     }
-    getRequests()
-  }, [])
+  }
 
   return (
     <CommunityContext.Provider

@@ -27,7 +27,7 @@ const MainPage = () => {
         />
       </div>
       <section className="flex flex-col mt-5 max-w-7xl">
-        <div className="flex flex-row flex-wrap gap-5">
+        <div className="flex flex-row flex-wrap gap-5 justify-center">
           {communities.length ? (
             communities.map((community, index) => (
               <div key={index}>

@@ -291,24 +291,18 @@ const sendRequest = async (req, res) => {
 const getRequests = async (req, res) => {
   const { id } = req.params
   const userAdmin = req.user._id.toString()
-  const communityExist = await CommunityDAO.findCommunityByIdPopulate(id)
+  const communityExist = await CommunityDAO.findCommunityById(id)
   if (!communityExist) {
     return res.status(400).json({ msg: 'La comunidad no existe' })
   }
   if (communityExist.admin._id.toString() !== userAdmin) {
-    return res.status(400).json({ msg: 'No tienes permiso para ver solicitudes' })
+    return res
+      .status(400)
+      .json({ msg: 'No tienes permiso para ver solicitudes' })
   }
   try {
-    const requests = communityExist.requests.map(request => {
-      return {
-        communityExistName: communityExist.name,
-        userId: request._id,
-        name: request.name,
-        lastName: request.lastName,
-        email: request.email,
-      }
-    })
-    return res.status(200).json(requests)
+    const response = await CommunityDAO.findCommunityByIdPopulate(id)
+    return res.status(200).json(response.requests)
   } catch (error) {
     return res.status(500).json({ msg: error.message })
   }

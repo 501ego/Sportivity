@@ -27,7 +27,9 @@ const Community = () => {
             {community.location}.
           </h2>
         </div>
-        <Rating />
+        <div className="flex justify-center">
+          <Rating />
+        </div>
         <h3 className="text-start upper text-zinc-700 font-black text-4xl mt-2">
           Instructor: {community.admin}.
         </h3>
@@ -37,10 +39,10 @@ const Community = () => {
             <h2 className="text-zinc-600 font-black text-4xl mb-2">
               Descripción:
             </h2>
-            <p className=" text-zinc-700 text-2xl">{community.description}</p>
+            <p className=" text-zinc-700 text-xl">{community.description}</p>
           </div>
           <div className="flex flex-row justify-center gap-4 mt-5">
-            <div className=" text-zinc-700 text-2xl mb-5 mt-5">
+            <div className=" text-zinc-700 text-xl mb-5 mt-5">
               <RulesComponent rules={community.rules} />
             </div>
           </div>
