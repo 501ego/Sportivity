@@ -6,6 +6,7 @@ const SecureRoute = () => {
   const { auth, loading } = useAuth()
   if (loading) return 'Loading...'
 
+
   return (
     <>
       {auth._id ? (

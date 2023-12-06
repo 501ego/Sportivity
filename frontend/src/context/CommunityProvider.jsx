@@ -10,7 +10,7 @@ const CommunityProvider = ({ children }) => {
   const [community, setCommunity] = useState({})
   const [alert, setAlert] = useState({})
   const [requests, setRequests] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const navigate = useNavigate()
 
@@ -46,6 +46,7 @@ const CommunityProvider = ({ children }) => {
         community,
         config
       )
+      console.log(data)
 
       const communityEdited = communities.map(communityState =>
         communityState._id === data._id ? data : communityState
@@ -144,12 +145,12 @@ const CommunityProvider = ({ children }) => {
     }
     getMyCommunities()
   }, [])
-
+  
   const getCommunity = async id => {
-    setLoading(true)
     try {
       const token = localStorage.getItem('token')
       if (!token) {
+        setLoading(false)
         return
       }
       const config = {
@@ -251,7 +252,35 @@ const CommunityProvider = ({ children }) => {
     }
   }
 
-  const getRequests = async id => {
+  useEffect(() => {
+
+    const getRequests = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          setLoading(false)
+          return
+        }
+        const config = {
+          headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        const { data } = await axiosClient.get(
+          `/communities/getrequests`,
+          config
+        )
+        setRequests(data)
+      } catch (error) {
+        console.log(error)
+      }
+      setLoading(false)
+    }
+    getRequests()
+  }, [])
+
+  const addMember = async (id, user) => {
     try {
       const token = localStorage.getItem('token')
       if (!token) {
@@ -263,17 +292,31 @@ const CommunityProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       }
-      const { data } = await axiosClient.get(
-        `/communities/getrequests/${id}`,
+    
+      const { data } = await axiosClient.put(
+        `communities/addmember/${id}`,
+        {user},
         config
       )
-      setRequests(data)
-      console.log(data)
+      
+      setAlert({
+        msg: data.msg,
+        error: false,
+      })
+      setTimeout(() => {
+        setAlert({})
+      }, 3000)
     } catch (error) {
-      console.log(error)
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      })
+      setTimeout(() => {
+        setAlert({})
+      }, 3000)
     }
   }
-
+  
   return (
     <CommunityContext.Provider
       value={{
@@ -287,7 +330,8 @@ const CommunityProvider = ({ children }) => {
         loading,
         alert,
         sendRequest,
-        getRequests,
+        requests,
+        addMember,
       }}
     >
       {children}

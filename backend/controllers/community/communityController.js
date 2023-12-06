@@ -137,7 +137,7 @@ const addMember = async (req, res) => {
       .status(400)
       .json({ msg: 'No tienes permiso para agregar miembro' })
   }
-  const userToAdd = await UserDAO.findUserById(req.body)
+  const userToAdd = await UserDAO.findUserById(req.body.user)
   if (!userToAdd) {
     return res.status(400).json({ msg: 'El usuario no existe' })
   }
@@ -289,20 +289,32 @@ const sendRequest = async (req, res) => {
 }
 
 const getRequests = async (req, res) => {
-  const { id } = req.params
+
   const userAdmin = req.user._id.toString()
-  const communityExist = await CommunityDAO.findCommunityById(id)
-  if (!communityExist) {
-    return res.status(400).json({ msg: 'La comunidad no existe' })
-  }
-  if (communityExist.admin._id.toString() !== userAdmin) {
-    return res
-      .status(400)
-      .json({ msg: 'No tienes permiso para ver solicitudes' })
+  const userExist = await UserDAO.findUserById(userAdmin)
+  if (!userExist) {
+    return res.status(400).json({ msg: 'El usuario no existe' })
   }
   try {
-    const response = await CommunityDAO.findCommunityByIdPopulate(id)
-    return res.status(200).json(response.requests)
+    const communityExist = await CommunityDAO.getMyRequest(userExist._id)
+    
+    if (communityExist.some(community => community.admin._id.toString() !== userExist._id.toString())) {
+      return res
+      .status(400)
+      .json({ msg: 'No tienes permiso para ver solicitudes' })
+    }
+    //console.log(communityExist.filter(community => community.requests.length !== 0))
+    const myRequests = communityExist.filter(community => community.requests.length !== 0)
+    const myRequestsFilter = myRequests.flatMap(community =>
+      community.requests.map(request => ({
+        communityId: community._id,
+        communityName: community.name,
+        name: request.name,
+        lastName: request.lastName,
+        userId: request._id,
+      }))
+    )
+    return res.status(200).json(myRequestsFilter)
   } catch (error) {
     return res.status(500).json({ msg: error.message })
   }

@@ -4,14 +4,10 @@ import useCommunity from '../hooks/useCommunity'
 import Alert from './Alert'
 
 const CommunityCard = ({ community }) => {
-  const { sendRequest, getRequests, alert } = useCommunity()
+  const { sendRequest, alert } = useCommunity()
   const handleJoin = async () => {
     await sendRequest(community._id)
   }
-
-  useEffect(() => {
-    getRequests(community._id)
-  }, [])
 
   const { msg } = alert
   return (

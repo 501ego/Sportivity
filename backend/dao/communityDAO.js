@@ -1,21 +1,15 @@
 import Community from '../models/Community.js'
 
 class CommunityDAO {
-  static async findCommunityByIdPopulate(communityId) {
+  
+  static async getMyRequest(id) {
     try {
-      const community = await Community.findById(communityId)
-        .populate('admin')
+      return await Community.find({
+        $or: [{ admin: id }, { moderator: id }],
+      })
         .populate('requests')
-
-      // Si la comunidad tiene solicitudes y quieres hacer algo con ellas:
-      if (community && community.requests && community.requests.length > 0) {
-        // Aquí iteramos sobre las solicitudes
-        community.requests.forEach(request => {
-          // Hacer algo con cada solicitud
-          console.log(request)
-        })
-      }
-      return request
+        .populate('admin')
+      
     } catch (error) {
       return null
     }

@@ -15,6 +15,7 @@ const EditCommunity = () => {
     return 'Cargando...'
   }
 
+
   return (
     <section className="container mx-auto max-w-2xl h-[calc(90vh)] items-center justify-center flex p-2">
       <article className="normal-box">

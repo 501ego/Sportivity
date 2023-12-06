@@ -28,7 +28,7 @@ const AuthProvider = ({ children }) => {
       try {
         const { data } = await axiosClient.get('/account/profile', config)
         setAuth(data)
-        // navigate('/main-page')
+        //navigate('/main')
       } catch (error) {
         setAuth({})
         console.log(error)

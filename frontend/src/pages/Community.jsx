@@ -51,6 +51,11 @@ const Community = () => {
               <Link to="new-event">Crear evento</Link>
             </button>
           </div>
+          <div className="flex flex-row justify-center gap-4 mt-5">
+            <button className="btn btn-accent w-full max-w-xs rounded-xl text-lg">
+              <Link to="edit">editar</Link>
+            </button>
+          </div>
         </article>
       </div>
     </section>

@@ -20,7 +20,7 @@ const CommunityForm = () => {
 
   useEffect(() => {
     if (params.id) {
-      setId(community._id)
+      setId(params.id)
       setName(community.name)
       setDescription(community.description)
       setRules(community.rules)
