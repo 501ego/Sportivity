@@ -244,6 +244,30 @@ const exitFromEvent = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error al eliminar miembro', error })
   }
+
+}
+
+const getEvents = async (req, res) => {
+  const user = await UserDAO.findUserById(req.user._id.toString())
+  try {
+    const communities = await CommunityDAO.getEvents(user._id)
+    const events = communities.filter(community => community.events.length !== 0)
+    const eventsFiltered = events.flatMap(community =>
+      community.events.map(event =>({
+        communityId: community._id,
+        communityName: community.name,
+        eventId: event._id,
+        name: event.name,
+        date: event.date,
+        description: event.description,
+        location: event.location,
+        members: event.members,
+      }))  
+    )
+    res.status(200).json(eventsFiltered)
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener eventos', error })
+  }
 }
 
 export {
@@ -253,4 +277,5 @@ export {
   deleteEvent,
   deleteUserFromEvent,
   exitFromEvent,
+  getEvents,
 }

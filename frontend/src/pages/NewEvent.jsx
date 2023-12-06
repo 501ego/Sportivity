@@ -13,7 +13,6 @@ const NewEvent = () => {
   const { newEvent, showAlert, alert } = useEvent()
 
   const { id } = useParams()
-  console.log(id)
   const handleSumbit = async e => {
     e.preventDefault()
     if ([name, date, description, commune].includes('')) {

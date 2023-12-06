@@ -49,7 +49,7 @@ const CommunitySchema = new mongoose.Schema(
     events: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Event',
       },
     ],
     valoration: {

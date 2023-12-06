@@ -21,13 +21,13 @@ const CommunityProvider = ({ children }) => {
     }, 3000)
   }
 
-  const submitCommmunity = async community => {
+  /*const submitCommmunity = async community => {
     if (community.id) {
       await editCommunity(community)
     } else {
       await newCommunity(community)
     }
-  }
+  }*/
 
   const editCommunity = async community => {
     try {
@@ -88,6 +88,44 @@ const CommunityProvider = ({ children }) => {
         error: false,
       })
       navigate('main')
+    } catch (error) {
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      })
+    }
+  }
+
+  const deleteCommunity = async id => {
+
+    console.log(id)
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        return
+      }
+      const config = {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      const { data } = await axiosClient.delete(
+        `/communities/${id}`,
+        config
+      )
+      const communityDeleted = communities.filter(
+        community => community._id !== id
+      )
+      setCommunities(communityDeleted)
+      setAlert({
+        msg: data.msg,
+        error: false,
+      })
+      setTimeout(() => {
+        setAlert({})
+        navigate('/main')
+      }, 3000)
     } catch (error) {
       setAlert({
         msg: error.response.data.msg,
@@ -322,7 +360,9 @@ const CommunityProvider = ({ children }) => {
       value={{
         communities,
         myCommunities,
-        submitCommmunity,
+        editCommunity,
+        newCommunity,
+        deleteCommunity,
         getCommunity,
         showAlert,
         searchCommunity,

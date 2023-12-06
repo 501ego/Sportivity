@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axiosClient from '../config/axiosClient'
 
 const EventContext = createContext()
@@ -6,6 +7,7 @@ const EventContext = createContext()
 const EventProvider = ({ children }) => {
   const [events, setEvents] = useState([])
   const [alert, setAlert] = useState({})
+  const navigate = useNavigate()
 
   const showAlert = alert => {
     setAlert(alert)
@@ -33,17 +35,50 @@ const EventProvider = ({ children }) => {
         msg: data.msg,
         error: false,
       })
+      setTimeout(() => {
+        setAlert({})
+        navigate(`/main/community/${id}/events`)
+      }, 3000)
     } catch (error) {
       setAlert({
         msg: error.response.data.msg,
         error: true,
       })
+      setTimeout(() => {
+        setAlert({})
+      }, 3000)
     }
   }
+
+  useEffect(() => {
+    const getEvents = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          return
+        }
+        const config = {
+          headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        const { data } = await axiosClient.get(`/events/getevents`, config)
+        setEvents(data)
+      } catch (error) {
+        setAlert({
+          msg: error.response.data.msg,
+          error: true,
+        })
+      }
+    }
+    getEvents()
+  }, [])
 
   return (
     <EventContext.Provider
       value={{
+        events,
         newEvent,
         showAlert,
         alert,

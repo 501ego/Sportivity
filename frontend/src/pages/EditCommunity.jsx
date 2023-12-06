@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import useCommunity from '../hooks/useCommunity'
-import CommunityForm from '../components/CommunityForm'
+import EditCommunityForm from '../components/EditCommunityForm'
 
 const EditCommunity = () => {
   const params = useParams()
@@ -22,7 +22,7 @@ const EditCommunity = () => {
         <h1 className="text-center text-sky-600 font-black text-5xl mt-2 mb-5">
           Editar comunidad {community.name}
         </h1>
-        <CommunityForm />
+        <EditCommunityForm />
       </article>
     </section>
   )

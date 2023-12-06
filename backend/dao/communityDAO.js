@@ -1,6 +1,18 @@
 import Community from '../models/Community.js'
 
 class CommunityDAO {
+
+  static async getEvents(id) {
+    try {
+      return await Community.find({
+        $or: [{ admin: id }, { moderator: id }, { members: id }],
+      })
+        .populate('events')
+      
+    } catch (error) {
+      return null
+    }
+  }
   
   static async getMyRequest(id) {
     try {

@@ -18,6 +18,7 @@ import Community from './pages/Community'
 import NewEvent from './pages/NewEvent'
 import EditCommunity from './pages/EditCommunity'
 import { NotificationProvider } from './context/NotificationProvider'
+import Events from './pages/Events'
 
 function App() {
   return (
@@ -51,16 +52,16 @@ function App() {
                     <Route path="upgrade-user" element={<UpgradeUser />} />
                     <Route path="my-communities" element={<MyCommunities />} />
                     <Route
-                      path="my-communities/community/:id"
-                      element={<Community />}
-                    />
-                    <Route
                       path="community/:id/edit"
                       element={<EditCommunity />}
                     />
                     <Route
                       path="community/:id/new-event"
                       element={<NewEvent />}
+                    />
+                    <Route
+                      path="community/:id/events"
+                      element={<Events />}
                     />
                   </Route>
                 </Routes>

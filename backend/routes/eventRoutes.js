@@ -8,9 +8,11 @@ import {
   deleteEvent,
   deleteUserFromEvent,
   exitFromEvent,
+  getEvents,
 } from '../controllers/events/eventsController.js'
 
 router.route('/:id').post(checkAuth, createEvent)
+router.route('/getevents').get(checkAuth, getEvents)
 router.route('/accept/:id').put(checkAuth, acceptEvent)
 router.route('/edit/:id/:idEvent').put(checkAuth, editEvent)
 router.route('/delete/:id/:idEvent').delete(checkAuth, deleteEvent)

@@ -1,48 +1,53 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import useActivity from '../hooks/useActivity'
 import Alert from './Alert.jsx'
 import useCommunity from '../hooks/useCommunity.jsx'
-import communesData from '../utilities/communes.json'
 
-const CommunityForm = () => {
-  const [selectedActivity, setSelectedActivity] = useState('')
+const EditCommunityForm = () => {
+
+	const [id, setId] = useState(null)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [rules, setRules] = useState('')
-  const { activities } = useActivity()
-  const [commune, setCommune] = useState('')
 
-  const { newCommunity, showAlert, alert } = useCommunity()
+  const params = useParams()
+
+  const { editCommunity, showAlert, alert, community } = useCommunity()
+
+  useEffect(() => {
+		setId(params.id)
+		setName(community.name)
+		setDescription(community.description)
+		setRules(community.rules)
+  }, [community])
 
   const handleSubmit = async e => {
     e.preventDefault()
-    if ([selectedActivity, name, description, rules].includes('')) {
+    if ([name, description, rules].includes('')) {
       showAlert({
         msg: 'Todos los campos son obligatorios',
         error: true,
       })
       return
     }
-    await newCommunity({
-      activity: selectedActivity,
+    await editCommunity({
+      id,
       name,
       description,
       rules,
-      location: commune,
     })
 
+    setId(null)
     setName('')
     setDescription('')
     setRules('')
-    setSelectedActivity('')
-    setCommune('')
   }
 
   const { msg } = alert
 
-  return (
-    <article>
+
+	return (
+		<article>
       <form className="p-5" onSubmit={handleSubmit}>
         <div className="form-control">
           <label className="label" htmlFor="name">
@@ -81,53 +86,13 @@ const CommunityForm = () => {
             onChange={e => setRules(e.target.value)}
           />
         </div>
-        <div className="mb-5">
-          <label className="label">
-            <span className="custom-input-label">Actividad</span>
-          </label>
-          <select
-            id="activity"
-            className="custom-select"
-            value={selectedActivity ? selectedActivity : 'selectActivity'}
-            onChange={e => setSelectedActivity(e.target.value)}
-          >
-            <option value="selectActivity" disabled hidden>
-              Seleccione una actividad
-            </option>
-            {activities.map(Activity => (
-              <option key={Activity._id} value={Activity.name}>
-                {Activity.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-1">
-          <select
-            id="commune"
-            className="custom-select"
-            value={commune ? commune : 'selectCommune'}
-            onChange={e => setCommune(e.target.value)}
-          >
-            <option value="selectCommune" disabled hidden>
-              Seleccione una comuna
-            </option>
-            {communesData.communes.map((communeName, index) => (
-              <option key={index} value={communeName}>
-                {communeName}
-              </option>
-            ))}
-          </select>
-        </div>
-        <input
-          type="file"
-          className="file-input file-input-ghost w-full mb-5"
-        />
-        <button type="submit" className="custom-auth-button">
-          Registrar comunidad
+        <button type="submit" className="custom-auth-button mt-2">
+          Actualizar comunidad
         </button>
       </form>
       {msg && <Alert alert={alert} />}
     </article>
-  )
+	)
 }
-export default CommunityForm
+
+export default EditCommunityForm
