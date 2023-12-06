@@ -27,6 +27,18 @@ class CommunityDAO {
     }
   }
 
+  static async deleteRequest(id, userId) {
+    try {
+      const community = await Community.findById(id)
+      community.requests = community.requests.filter(
+        (request) => request._id.toString() !== userId
+      )
+      await community.save()
+    } catch (error) {
+      return null
+    }
+  }
+
   static async findCommunityByField(field, value) {
     try {
       return await Community.findOne({ [field]: value })

@@ -158,6 +158,7 @@ const addMember = async (req, res) => {
       $push: { community: id },
     }
     await UserDAO.updateUser(userToAdd._id, updateData)
+    await CommunityDAO.deleteRequest(id, userToAdd._id)
     return res.status(200).json({ msg: 'Miembro agregado' })
   } catch (error) {
     return res.status(500).json({ msg: error.message })
