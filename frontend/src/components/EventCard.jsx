@@ -12,6 +12,7 @@ const EventCard = ({ event }) => {
   }
 
   const handleClick = () => {
+    navigate(`/main/community/:id/event/${event.eventId}`)
   }
 
   const { msg } = alert

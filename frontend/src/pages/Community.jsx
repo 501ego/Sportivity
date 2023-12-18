@@ -70,6 +70,9 @@ const Community = () => {
             <button className="btn btn-accent w-full max-w-xs rounded-xl text-lg">
               <Link to="events">eventos</Link>
             </button>
+            <button className="btn btn-accent w-full max-w-xs rounded-xl text-lg">
+              <Link to="foro">Foro</Link>
+            </button>
           </div>
 
           <div className="flex flex-col justify-center gap-4 mt-10 container max-w-4xl bg-slate-100 p-10">
