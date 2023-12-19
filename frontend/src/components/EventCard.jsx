@@ -2,23 +2,22 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useCommunity from '../hooks/useCommunity'
 import Alert from './Alert'
+import moment from 'moment'
 
 const EventCard = ({ event }) => {
-
-	const { alert } = useCommunity()
+  const { alert } = useCommunity()
   const navigate = useNavigate()
 
-  const handleJoin = async () => {
-  }
+  const handleJoin = async () => {}
 
   const handleClick = () => {
-    navigate(`/main/community/:id/event/${event.eventId}`)
+    navigate(`/main/community/${event.communityId}/event/${event.eventId}`)
   }
 
   const { msg } = alert
 
-	return (
-		<section className="container bg-zinc-50 rounded-md shadow-md shadow-zinc-600 max-w-xl p-2 flex flex-col items-center mt-5">
+  return (
+    <section className="container bg-zinc-50 rounded-md shadow-md shadow-zinc-600 max-w-xl p-2 flex flex-col items-center mt-5">
       <article className="card-body flex flex-col w-full">
         <div onClick={handleClick}>
           <h2 className="card-title text-4xl font-black text-zinc-800 mb-2">
@@ -41,7 +40,9 @@ const EventCard = ({ event }) => {
       </article>
       <div className="flex flex-row gap-4 align-middle justify-center mb-2 flex-wrap">
         <div className="badge badge-accent badge-outline p-3">
-          <span className="font-semibold text-base">{event.date}</span>
+          <span className="font-semibold text-base">
+            {moment(event.date).format('DD/MM/YYYY HH:mm')}
+          </span>
         </div>
         <div className="badge badge-accent badge-outline p-3">
           <span className="font-semibold text-base">{event.location}</span>
@@ -49,7 +50,7 @@ const EventCard = ({ event }) => {
       </div>
       {msg && <Alert alert={alert} />}
     </section>
-	)
+  )
 }
 
 export default EventCard

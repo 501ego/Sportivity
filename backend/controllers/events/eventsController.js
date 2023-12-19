@@ -244,16 +244,17 @@ const exitFromEvent = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error al eliminar miembro', error })
   }
-
 }
 
 const getEvents = async (req, res) => {
   const user = await UserDAO.findUserById(req.user._id.toString())
   try {
     const communities = await CommunityDAO.getEvents(user._id)
-    const events = communities.filter(community => community.events.length !== 0)
+    const events = communities.filter(
+      community => community.events.length !== 0
+    )
     const eventsFiltered = events.flatMap(community =>
-      community.events.map(event =>({
+      community.events.map(event => ({
         communityId: community._id,
         communityName: community.name,
         eventId: event._id,
@@ -262,11 +263,36 @@ const getEvents = async (req, res) => {
         description: event.description,
         location: event.location,
         members: event.members,
-      }))  
+      }))
     )
     res.status(200).json(eventsFiltered)
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener eventos', error })
+  }
+}
+
+const getEvent = async (req, res) => {
+  const { id, idEvent } = req.params
+  const event = await EventDAO.findEventById(idEvent)
+  const community = await CommunityDAO.findCommunityById(id)
+  if (!community) {
+    return res.status(404).json({ msg: 'La comunidad no existe' })
+  }
+  if (!event) {
+    return res.status(404).json({ msg: 'El evento no existe' })
+  }
+  const eventInCommunity = community.events.find(
+    event => event.toString() === idEvent.toString()
+  )
+  if (!eventInCommunity) {
+    return res
+      .status(403)
+      .json({ message: 'El evento no es parte de la comunidad' })
+  }
+  try {
+    res.status(200).json(event)
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener evento', error })
   }
 }
 
@@ -278,4 +304,5 @@ export {
   deleteUserFromEvent,
   exitFromEvent,
   getEvents,
+  getEvent,
 }

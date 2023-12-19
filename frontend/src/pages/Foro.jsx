@@ -7,88 +7,101 @@ import { io } from 'socket.io-client'
 let socket
 
 const Foro = () => {
+  const [newMessage, setNewMessage] = useState('')
 
-	const [newMessage, setNewMessage] = useState('')
+  const {
+    createMessage,
+    showAlert,
+    alert,
+    getMessages,
+    messages,
+    getMessagesSocket,
+  } = useForum()
+  const { id } = useParams()
 
-	const { createMessage, showAlert, alert, getMessages, messages, getMessagesSocket } = useForum()
-	const { id } = useParams()
+  const handleSubmit = async e => {
+    e.preventDefault()
+    if (newMessage === '') {
+      showAlert({
+        msg: 'Todos los campos son obligatorios',
+        error: true,
+      })
+      return
+    }
+    await createMessage(
+      {
+        message: newMessage,
+      },
+      id
+    )
+    setNewMessage('')
+  }
 
-	const handleSubmit = async e => {
-		e.preventDefault()
-		if (newMessage === '') {
-			showAlert({
-				msg: 'Todos los campos son obligatorios',
-				error: true,
-			})
-			return
-		}
-		await createMessage(
-			{
-				message: newMessage
-			},
-			id
-		)
-		setNewMessage('')
-	}
+  useEffect(() => {
+    getMessages(id)
+  }, [])
 
-	useEffect(() => {
-		getMessages(id)
-	}, [])
+  useEffect(() => {
+    socket = io(import.meta.env.VITE_BACKEND_URL)
+    socket.emit('join community', id)
+  }, [])
 
-	useEffect(() => {
-		socket = io(import.meta.env.VITE_BACKEND_URL)
-		socket.emit('join community', id)
-		
-	}, [])
+  useEffect(() => {
+    socket.on('message', message => {
+      getMessagesSocket(message)
+    })
+  })
 
-	useEffect(() => {
-		socket.on('message', message => {
-			getMessagesSocket(message)
-		})
-	})
+  const { msg } = alert
 
-	const { msg } = alert
-
-	return (
-		<section className="flex flex-col items-center">
+  return (
+    <section className="flex flex-col items-center">
       <div className="normal-box max-w-5xl">
-        <div className='lg:flex lg:justify-between'>
-          <h1 className="text-start uppercase text-zinc-600 font-black text-6xl mt-2">
+        <div className="lg:flex lg:justify-center">
+          <h1 className="text-center uppercase text-zinc-600 font-black text-6xl">
             Foro
           </h1>
         </div>
+        <div className="flex flex-col gap-4 mt-5 py-5 margin-auto items-center bg-gray-100 rounded-md">
+          <div className="flex flex-col gap-4 mt-5 items-start text-zinc-900 text-lg">
+            {messages &&
+              messages.map((message, index) => (
+                <ul key={index}>
+                  <span className="font-bold text-accent text-xl">
+                    {message.user.name}
+                  </span>{' '}
+                  : {message.message}
+                </ul>
+              ))}
+          </div>
+        </div>
 
-				<div className="flex flex-col gap-4 mt-5 items-center">
-					{messages && messages.map((message, index) => (
-						<li key={index}>{message.user.name} : {message.message}</li>
-					))}
-				</div>
-
-        <form className="flex flex-col items-center mt-10"
-					onSubmit={handleSubmit}
-				>
-          <div className="flex flex-row justify-center gap-4 mt-5">
-						<label className="label" htmlFor="message">
-						</label>
-						<input
-							id="message"
-							type="text"
-							placeholder="Mensaje"
-							className="custom-input"
-							value={newMessage}
-							onChange={e => setNewMessage(e.target.value)}
-						/>
-            <button className="btn btn-accent max-w-xs rounded-xl text-lg"
-							type="submit"
-						>
+        <form
+          className="flex flex-col items-center mt-10 w-full"
+          onSubmit={handleSubmit}
+        >
+          <div className="flex flex-row justify-center gap-3 w-full">
+            <label className="label" htmlFor="message"></label>
+            <input
+              id="message"
+              type="text"
+              placeholder="Mensaje"
+              className="custom-input"
+              value={newMessage}
+              onChange={e => setNewMessage(e.target.value)}
+            />
+            <button
+              className="btn btn-accent max-w-xs rounded-xl text-lg"
+              type="submit"
+            >
               Enviar
             </button>
           </div>
         </form>
       </div>
-			{msg && <Alert alert={alert} />}
+      {msg && <Alert alert={alert} />}
     </section>
-	)
+  )
 }
 
 export default Foro

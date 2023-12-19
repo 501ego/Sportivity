@@ -50,6 +50,32 @@ const EventProvider = ({ children }) => {
     }
   }
 
+  const getEvent = async (id, eventId) => {
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        return
+      }
+      const config = {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const { data } = await axiosClient.get(
+        `/events/getevent/${id}/${eventId}`,
+        config
+      )
+      setEvents(data)
+    } catch (error) {
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      })
+    }
+  }
+
   useEffect(() => {
     const getEvents = async () => {
       try {
@@ -82,6 +108,7 @@ const EventProvider = ({ children }) => {
         newEvent,
         showAlert,
         alert,
+        getEvent,
       }}
     >
       {children}

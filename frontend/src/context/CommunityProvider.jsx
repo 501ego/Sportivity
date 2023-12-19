@@ -97,7 +97,6 @@ const CommunityProvider = ({ children }) => {
   }
 
   const deleteCommunity = async id => {
-
     console.log(id)
     try {
       const token = localStorage.getItem('token')
@@ -110,10 +109,7 @@ const CommunityProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       }
-      const { data } = await axiosClient.delete(
-        `/communities/${id}`,
-        config
-      )
+      const { data } = await axiosClient.delete(`/communities/${id}`, config)
       const communityDeleted = communities.filter(
         community => community._id !== id
       )
@@ -124,7 +120,7 @@ const CommunityProvider = ({ children }) => {
       })
       setTimeout(() => {
         setAlert({})
-        navigate('/main')
+        navigate('/communities')
       }, 3000)
     } catch (error) {
       setAlert({
@@ -183,7 +179,7 @@ const CommunityProvider = ({ children }) => {
     }
     getMyCommunities()
   }, [])
-  
+
   const getCommunity = async id => {
     try {
       const token = localStorage.getItem('token')
@@ -291,7 +287,6 @@ const CommunityProvider = ({ children }) => {
   }
 
   useEffect(() => {
-
     const getRequests = async () => {
       try {
         const token = localStorage.getItem('token')
@@ -330,13 +325,13 @@ const CommunityProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       }
-    
+
       const { data } = await axiosClient.put(
         `communities/addmember/${id}`,
-        {user},
+        { user },
         config
       )
-      
+
       setAlert({
         msg: data.msg,
         error: false,
@@ -354,7 +349,7 @@ const CommunityProvider = ({ children }) => {
       }, 3000)
     }
   }
-  
+
   return (
     <CommunityContext.Provider
       value={{
