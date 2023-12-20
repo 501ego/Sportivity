@@ -1,29 +1,28 @@
 import React from 'react'
-import GoogleMapReact from 'google-map-react'
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>
-
-export default function SimpleMap({ center, zoom, text }) {
-  // Valores predeterminados para el centro y el zoom del mapa
-  const defaultCenter = {
-    lat: 59.955413,
-    lng: 30.337844,
+const SimpleMap = ({ center }) => {
+  const mapStyles = {
+    height: '400px',
+    width: '100%',
   }
-  const defaultZoom = 11
+
+  const defaultCenter = {
+    lat: -34.397,
+    lng: 150.644,
+  }
 
   return (
-    <div style={{ height: '100vh', width: '100%' }}>
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: 'AIzaSyC4UxtyRHANih285JzIiah9sfdeSROOyAc' }}
-        defaultCenter={center || defaultCenter}
-        defaultZoom={zoom || defaultZoom}
+    <LoadScript googleMapsApiKey="AIzaSyC4UxtyRHANih285JzIiah9sfdeSROOyAc">
+      <GoogleMap
+        mapContainerStyle={mapStyles}
+        zoom={17}
+        center={center || defaultCenter}
       >
-        <AnyReactComponent
-          lat={center ? center.lat : defaultCenter.lat}
-          lng={center ? center.lng : defaultCenter.lng}
-          text={text || 'My Marker'}
-        />
-      </GoogleMapReact>
-    </div>
+        {center && <Marker position={center} />}
+      </GoogleMap>
+    </LoadScript>
   )
 }
+
+export default SimpleMap

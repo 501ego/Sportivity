@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useCommunity from '../hooks/useCommunity'
+import useEvent from '../hooks/useEvent'
 import Alert from './Alert'
 import moment from 'moment'
 
 const EventCard = ({ event }) => {
-  const { alert } = useCommunity()
+  const { alert, participateEvent } = useEvent()
   const navigate = useNavigate()
 
-  const handleJoin = async () => {}
+  const handleJoin = async () => {
+    await participateEvent(event.communityId, event.eventId)
+  }
 
   const handleClick = () => {
     navigate(`/main/community/${event.communityId}/event/${event.eventId}`)
@@ -34,7 +37,7 @@ const EventCard = ({ event }) => {
             className="btn btn-accent w-full max-w-xs rounded-xl text-lg"
             onClick={handleJoin}
           >
-            ¡Únete!
+            Participar
           </button>
         </div>
       </article>

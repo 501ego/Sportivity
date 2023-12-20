@@ -39,8 +39,6 @@ const Foro = () => {
     navigate(`/main/community/${id}`)
   }
 
-  console.log(id)
-
   const handleSubmit = async e => {
     e.preventDefault()
     if (newMessage === '') {

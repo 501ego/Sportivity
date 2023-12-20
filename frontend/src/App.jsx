@@ -23,6 +23,7 @@ import Events from './pages/Events'
 import Event from './pages/Event'
 import EditEvent from './pages/EditEvent'
 import Foro from './pages/Foro'
+import Participants from './pages/participants'
 
 function App() {
   return (
@@ -55,7 +56,10 @@ function App() {
                       />
                       <Route path="community/:id" element={<Community />} />
                       <Route path="upgrade-user" element={<UpgradeUser />} />
-                      <Route path="my-communities" element={<MyCommunities />} />
+                      <Route
+                        path="my-communities"
+                        element={<MyCommunities />}
+                      />
                       <Route
                         path="community/:id/edit"
                         element={<EditCommunity />}
@@ -64,14 +68,8 @@ function App() {
                         path="community/:id/new-event"
                         element={<NewEvent />}
                       />
-                      <Route
-                        path="community/:id/events"
-                        element={<Events />}
-                      />
-                      <Route
-                        path="community/:id/foro"
-                        element={<Foro />}
-                      />
+                      <Route path="community/:id/events" element={<Events />} />
+                      <Route path="community/:id/foro" element={<Foro />} />
                       <Route
                         path="community/:id/event/:eventId"
                         element={<Event />}
@@ -79,6 +77,10 @@ function App() {
                       <Route
                         path="community/:id/event/:eventId/edit"
                         element={<EditEvent />}
+                      />
+                      <Route
+                        path="community/:id/event/:eventId/participants"
+                        element={<Participants />}
                       />
                     </Route>
                   </Routes>

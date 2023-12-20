@@ -4,6 +4,8 @@ import useAuth from '../hooks/useAuth'
 
 const NavBar = () => {
   const { requests, loading, addMember } = useCommunity()
+  const { auth } = useAuth()
+
   if (loading) {
     return <p>Loading...</p>
   }
@@ -13,8 +15,6 @@ const NavBar = () => {
       await addMember(request.communityId, request.userId)
     }
   }
-
-  const { auth } = useAuth()
 
   return (
     <div className="navbar bg-zinc-900">

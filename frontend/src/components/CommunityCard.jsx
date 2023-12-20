@@ -50,7 +50,7 @@ const CommunityCard = ({ community }) => {
                 className="btn btn-accent w-full max-w-xs rounded-xl text-lg"
                 onClick={handleClick}
               >
-                entrar
+                ver
               </button>
             )
           ) : (

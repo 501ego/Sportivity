@@ -6,6 +6,7 @@ const EventContext = createContext()
 
 const EventProvider = ({ children }) => {
   const [events, setEvents] = useState([])
+  const [event, setEvent] = useState({})
   const [alert, setAlert] = useState({})
   const navigate = useNavigate()
 
@@ -50,7 +51,7 @@ const EventProvider = ({ children }) => {
     }
   }
 
-  const getEvent = async (id, eventId) => {
+  const getEvent = async id => {
     try {
       const token = localStorage.getItem('token')
       if (!token) {
@@ -63,11 +64,8 @@ const EventProvider = ({ children }) => {
         },
       }
 
-      const { data } = await axiosClient.get(
-        `/events/getevent/${id}/${eventId}`,
-        config
-      )
-      setEvents(data)
+      const { data } = await axiosClient.get(`/events/getevent/${id}`, config)
+      setEvent(data)
     } catch (error) {
       setAlert({
         msg: error.response.data.msg,
@@ -101,6 +99,47 @@ const EventProvider = ({ children }) => {
     getEvents()
   }, [])
 
+  const participateEvent = async (id, eventId) => {
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        return
+      }
+      const config = {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const { data } = await axiosClient.put(
+        `/events/participate/${id}`,
+        { eventId },
+        config
+      )
+
+      console.log(data)
+
+      setAlert({
+        msg: data.msg,
+        error: false,
+      })
+      setTimeout(() => {
+        setAlert({})
+        navigate(`/main/community/${id}/events`)
+      }, 3000)
+    } catch (error) {
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      })
+
+      setTimeout(() => {
+        setAlert({})
+      }, 3000)
+    }
+  }
+
   return (
     <EventContext.Provider
       value={{
@@ -109,6 +148,8 @@ const EventProvider = ({ children }) => {
         showAlert,
         alert,
         getEvent,
+        event,
+        participateEvent,
       }}
     >
       {children}

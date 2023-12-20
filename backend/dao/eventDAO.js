@@ -42,6 +42,15 @@ class EventDAO {
       return null
     }
   }
+
+  static async findEventByIdPopulate(id) {
+    try {
+      return await Event.findById(id).populate('members').populate('community')
+    } catch (error) {
+      return null
+    }
+  }
+
   static async findEventByField(field, value) {
     try {
       return await Event.findOne({ [field]: value })

@@ -46,7 +46,7 @@ const acceptEvent = async (req, res) => {
   )
   const eventExists = await EventDAO.findEventById(req.body.eventId)
   if (!eventExists) {
-    return res.status(404).json({ message: 'El evento no existe' })
+    return res.status(404).json({ msg: 'El evento no existe' })
   }
   const userInEvent = eventExists.members.find(
     member => member.toString() === userExists._id.toString()
@@ -60,29 +60,29 @@ const acceptEvent = async (req, res) => {
   if (!eventInCommunity) {
     return res
       .status(403)
-      .json({ message: 'El evento no es parte de la comunidad' })
+      .json({ msg: 'El evento no es parte de la comunidad' })
   }
 
   if (!community) {
-    return res.status(404).json({ message: 'La comunidad no existe' })
+    return res.status(404).json({ msg: 'La comunidad no existe' })
   }
   if (!userExists) {
-    return res.status(404).json({ message: 'El usuario no existe' })
+    return res.status(404).json({ msg: 'El usuario no existe' })
   }
   if (!userInCommunity) {
-    return res.status(403).json({ message: 'No eres miembro de la comunidad' })
+    return res.status(403).json({ msg: 'No eres miembro de la comunidad' })
   }
   if (userExists._id.toString() !== req.user._id.toString()) {
     return res
       .status(403)
-      .json({ message: 'No tienes permiso para unirte a este evento' })
+      .json({ msg: 'No tienes permiso para unirte a este evento' })
   }
 
   try {
     await EventDAO.addMember(req.body.eventId, userExists._id)
-    res.status(201).json({ message: 'Miembro agregado' })
+    res.status(201).json({ msg: 'Inscrito al evento' })
   } catch (error) {
-    res.status(500).json({ message: 'Error al agregar miembro', error })
+    res.status(500).json({ msg: 'Error al agregar miembro', error })
   }
 }
 
@@ -272,22 +272,10 @@ const getEvents = async (req, res) => {
 }
 
 const getEvent = async (req, res) => {
-  const { id, idEvent } = req.params
-  const event = await EventDAO.findEventById(idEvent)
-  const community = await CommunityDAO.findCommunityById(id)
-  if (!community) {
-    return res.status(404).json({ msg: 'La comunidad no existe' })
-  }
+  const { id } = req.params
+  const event = await EventDAO.findEventByIdPopulate(id)
   if (!event) {
     return res.status(404).json({ msg: 'El evento no existe' })
-  }
-  const eventInCommunity = community.events.find(
-    event => event.toString() === idEvent.toString()
-  )
-  if (!eventInCommunity) {
-    return res
-      .status(403)
-      .json({ message: 'El evento no es parte de la comunidad' })
   }
   try {
     res.status(200).json(event)
