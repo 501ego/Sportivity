@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom'
 import useCommunity from '../hooks/useCommunity'
 import useAuth from '../hooks/useAuth'
+import { Link } from 'react-router-dom'
+import useEvent from '../hooks/useEvent'
 
 const NavBar = () => {
   const { requests, loading, addMember } = useCommunity()
@@ -14,6 +15,10 @@ const NavBar = () => {
     if (request.communityId) {
       await addMember(request.communityId, request.userId)
     }
+  }
+
+  const handleLogout = async () => {
+    localStorage.removeItem('token')
   }
 
   return (
@@ -161,7 +166,9 @@ const NavBar = () => {
               <a className="text-accent">Configuración</a>
             </li>
             <li>
-              <a className="text-accent">Logout</a>
+              <Link to="/" onClick={handleLogout} className="text-accent">
+                Logout
+              </Link>
             </li>
           </ul>
         </div>

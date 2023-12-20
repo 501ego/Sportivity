@@ -17,13 +17,13 @@ const EventCard = ({ event }) => {
   }
 
   const handleJoin = async () => {
-    if (confirm('¿Estás seguro de querer participar en el evento?')){
+    if (confirm('¿Estás seguro de querer participar en el evento?')) {
       await participateEvent(event.communityId, event.eventId)
     }
   }
 
   const handleExit = async () => {
-    if (confirm('¿Estás seguro de querer salirte del evento?')){
+    if (confirm('¿Estás seguro de querer salirte del evento?')) {
       await exitFromEvent(event.communityId, event.eventId)
     }
   }
@@ -36,7 +36,7 @@ const EventCard = ({ event }) => {
 
   return (
     <section className="container bg-zinc-50 rounded-md shadow-md shadow-zinc-600 max-w-xl p-2 flex flex-col items-center mt-5">
-      <article className="card-body flex flex-col w-full">
+      <article className="card-body flex flex-col w-full h-full">
         <div onClick={handleClick}>
           <h2 className="card-title text-4xl font-black text-zinc-800 mb-2">
             {event.name}
@@ -47,8 +47,7 @@ const EventCard = ({ event }) => {
             </p>
           </div>
         </div>
-        {isMember ? 
-        (
+        {isMember ? (
           <div className="flex flex-row justify-center p-2">
             <button
               onClick={handleExit}
@@ -57,7 +56,7 @@ const EventCard = ({ event }) => {
               Dejar de participar
             </button>
           </div>
-        ):(
+        ) : (
           <div className="flex flex-row justify-center p-2">
             <button
               onClick={handleJoin}

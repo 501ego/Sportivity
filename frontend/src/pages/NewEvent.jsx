@@ -48,7 +48,7 @@ const NewEvent = () => {
             <input
               id="name"
               type="text"
-              placeholder="Tu nombre"
+              placeholder="Nombre del evento"
               className="custom-input"
               value={name}
               onChange={e => setName(e.target.value)}

@@ -65,6 +65,7 @@ const EventProvider = ({ children }) => {
       }
 
       const { data } = await axiosClient.get(`/events/getevent/${id}`, config)
+      console.log(data)
       setEvent(data)
     } catch (error) {
       setAlert({

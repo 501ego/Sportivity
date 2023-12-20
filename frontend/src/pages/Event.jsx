@@ -8,7 +8,15 @@ import Alert from '../components/Alert'
 
 const Event = () => {
   const { id, eventId } = useParams()
-  const { events, getEvent, participateEvent, alert, event, deleteEvent, exitFromEvent } = useEvent()
+  const {
+    events,
+    getEvent,
+    participateEvent,
+    alert,
+    event,
+    deleteEvent,
+    exitFromEvent,
+  } = useEvent()
   const [mapCenter, setMapCenter] = useState({
     lat: -33.44194,
     lng: -70.63201,
@@ -24,20 +32,20 @@ const Event = () => {
     getEvent(eventId)
   }, [])
 
-  const handleDelete = async() => {
+  const handleDelete = async () => {
     if (confirm('¿Estás seguro de eliminar este proyecto?')) {
       await deleteEvent(id, eventId)
     }
   }
 
   const handleJoin = async () => {
-    if (confirm('¿Estás seguro de querer participar en el evento?')){
+    if (confirm('¿Estás seguro de querer participar en el evento?')) {
       await participateEvent(id, eventId)
     }
   }
 
   const handleExit = async () => {
-    if (confirm('¿Estás seguro de querer salirte del evento?')){
+    if (confirm('¿Estás seguro de querer salirte del evento?')) {
       await exitFromEvent(id, eventId)
     }
   }
@@ -68,7 +76,8 @@ const Event = () => {
                   </Link>
                 </button>
 
-                <button className="bg-red-500 btn-sm rounded-md p-2 items-center flex w-full text-slate-100 hover:bg-red-600 justify-center"
+                <button
+                  className="bg-red-500 btn-sm rounded-md p-2 items-center flex w-full text-slate-100 hover:bg-red-600 justify-center"
                   onClick={handleDelete}
                 >
                   <svg
@@ -103,8 +112,7 @@ const Event = () => {
         <div className="w-full">
           <SimpleMap center={mapCenter} zoom={11} />
         </div>
-        {isMember ? 
-        (
+        {isMember ? (
           <div className="flex flex-row justify-center p-2">
             <button
               onClick={handleExit}
@@ -113,7 +121,7 @@ const Event = () => {
               Dejar de participar
             </button>
           </div>
-        ):(
+        ) : (
           <div className="flex flex-row justify-center p-2">
             <button
               onClick={handleJoin}

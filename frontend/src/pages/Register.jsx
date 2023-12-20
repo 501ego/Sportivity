@@ -15,6 +15,7 @@ const Register = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [password2, setPassword2] = useState('')
+  const [termsAccepted, setTermsAccepted] = useState(false)
 
   const [alert, setAlert] = useState({})
 
@@ -35,10 +36,12 @@ const Register = () => {
         email,
         password,
         password2,
-      ].includes('')
+      ].includes('') ||
+      !termsAccepted
     ) {
       setAlert({
-        msg: 'Todos los campos son obligatorios',
+        msg: 'Todos los campos son obligatorios y debes aceptar los términos y condiciones',
+        error: true,
         error: true,
       })
       return
@@ -258,6 +261,111 @@ const Register = () => {
               />
             </div>
           </div>
+
+          <div className="form-control mb-3 items-center">
+            <label className="custom-input-label" htmlFor="terms">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={termsAccepted}
+                onChange={e => setTermsAccepted(e.target.checked)}
+                className="checkbox"
+              />
+              <button
+                className=""
+                onClick={() =>
+                  document.getElementById('my_modal_1').showModal()
+                }
+              >
+                <span className="custom-input-span">
+                  {' '}
+                  Acepto los términos y condiciones
+                </span>
+              </button>
+            </label>
+          </div>
+          <dialog id="my_modal_1" className="modal">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg">Términos y condiciones</h3>
+              <article className="py-4">
+                <h2>1. Introducción</h2>
+                <p>
+                  Bienvenido a Sportify. Estos Términos y Condiciones rigen el
+                  uso de nuestra aplicación y sitio web, que facilitan la
+                  creación y participación en comunidades centradas en la
+                  actividad física y el deporte.
+                </p>
+
+                <h2>2. Aceptación de los Términos</h2>
+                <p>
+                  Al usar Sportify, usted acepta estar vinculado por estos
+                  Términos y Condiciones. Si no está de acuerdo con alguna parte
+                  de los términos, no tiene permiso para acceder a nuestro
+                  servicio.
+                </p>
+
+                <h2>3. Uso del Servicio</h2>
+                <h3>3.1 Conducta del Usuario</h3>
+                <p>
+                  Todos los usuarios deben mantener una conducta respetuosa y
+                  positiva dentro de la aplicación. Esto incluye respetar las
+                  diferentes opiniones, evitar el acoso o cualquier forma de
+                  discriminación, y contribuir a un entorno inclusivo y de
+                  apoyo.
+                </p>
+                <h3>3.2 Reglas de la Comunidad</h3>
+                <p>
+                  Cada comunidad puede tener sus propias reglas adicionales. Es
+                  responsabilidad del usuario conocer y adherirse a estas
+                  reglas.
+                </p>
+
+                <h2>4. Propiedad Intelectual</h2>
+                <p>
+                  Todo el contenido en Sportify, incluyendo textos, gráficos,
+                  logos, iconos, imágenes y software, es propiedad de [Nombre de
+                  tu Empresa] o se utiliza con permiso.
+                </p>
+
+                <h2>5. Limitación de Responsabilidad</h2>
+                <p>
+                  Sportify no es responsable de las interacciones entre usuarios
+                  dentro o fuera de la aplicación. Aunque moderamos el
+                  contenido, no podemos garantizar la precisión, integridad o
+                  calidad de los contenidos publicados.
+                </p>
+
+                <h2>6. Cambios en los Términos</h2>
+                <p>
+                  Nos reservamos el derecho de modificar estos términos en
+                  cualquier momento. Al continuar utilizando el servicio después
+                  de dichos cambios, acepta estar vinculado por la versión
+                  modificada de los Términos y Condiciones.
+                </p>
+
+                <h2>7. Contacto</h2>
+                <p>
+                  Para cualquier pregunta o comentario sobre estos términos,
+                  contáctenos en contacto@sportify.com.
+                </p>
+                <br />
+                <h2>8. Sugerencias o reclamos</h2>
+                <p>
+                  Peticiones de mejora o reportes de errores pueden ser enviados
+                  a develop@sportify.com. Por favor, incluya información
+                  suficiente para que podamos entender y reproducir el problema.
+                </p>
+                <br />
+                <p>Fecha de Última Actualización: 20.09.2021</p>
+              </article>
+
+              <div className="modal-action">
+                <form method="dialog">
+                  <button className="btn">Cerrar</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
           <button type="submit" className="custom-auth-button">
             Registrarse
           </button>
