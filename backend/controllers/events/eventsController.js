@@ -108,7 +108,7 @@ const editEvent = async (req, res) => {
   if (!eventInCommunity) {
     return res
       .status(403)
-      .json({ message: 'El evento no es parte de la comunidad' })
+      .json({ msg: 'El evento no es parte de la comunidad' })
   }
   try {
     const event = {
@@ -118,9 +118,9 @@ const editEvent = async (req, res) => {
       location,
     }
     await EventDAO.updateEvent(idEvent, event)
-    res.status(201).json({ message: 'Evento editado' })
+    res.status(201).json({ msg: 'Evento editado' })
   } catch (error) {
-    res.status(500).json({ message: 'Error al editar evento', error })
+    res.status(500).json({ msg: 'Error al editar evento', error })
   }
 }
 
@@ -221,28 +221,27 @@ const exitFromEvent = async (req, res) => {
   if (!eventInCommunity) {
     return res
       .status(403)
-      .json({ message: 'El evento no es parte de la comunidad' })
+      .json({ msg: 'El evento no es parte de la comunidad' })
   }
-
   const userInEvent = eventExists.members.find(
     member => member.toString() === req.user._id.toString()
   )
   if (!userInEvent) {
-    return res.status(409).json({ message: 'No participas en este evento' })
+    return res.status(409).json({ msg: 'No participas en este evento' })
   }
 
   const userInCommunity = community.members.find(
     member => member.toString() === req.user._id.toString()
   )
   if (!userInCommunity) {
-    return res.status(403).json({ message: 'No eres miembro de la comunidad' })
+    return res.status(403).json({ msg: 'No eres miembro de la comunidad' })
   }
 
   try {
     await EventDAO.deleteMember(idEvent, req.user._id)
-    res.status(201).json({ message: 'Miembro eliminado' })
+    res.status(201).json({ msg: 'Saliste del evento' })
   } catch (error) {
-    res.status(500).json({ message: 'Error al eliminar miembro', error })
+    res.status(500).json({ msg: 'Error al eliminar miembro', error })
   }
 }
 

@@ -118,7 +118,130 @@ const EventProvider = ({ children }) => {
         config
       )
 
-      console.log(data)
+      setAlert({
+        msg: data.msg,
+        error: false,
+      })
+      setTimeout(() => {
+        setAlert({})
+        navigate(`/main/community/${id}/events`)
+      }, 3000)
+    } catch (error) {
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      })
+
+      setTimeout(() => {
+        setAlert({})
+      }, 3000)
+    }
+  }
+
+  const editEvent = async (event, communityId) => {
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        return
+      }
+      const config = {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const { data } = await axiosClient.put(
+        `/events/edit/${communityId}/${event.id}`,
+        event,
+        config
+      )
+
+      const eventEdited = events.map(eventState =>
+        eventState._id === data._id ? data : eventState
+      )
+
+      setEvents(eventEdited)
+
+      setAlert({
+        msg: data.msg,
+        error: false,
+      })
+      setTimeout(() => {
+        setAlert({})
+        navigate(`/main/community/${communityId}/events`)
+      }, 3000)
+    } catch (error) {
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      })
+
+      setTimeout(() => {
+        setAlert({})
+      }, 3000)
+    }
+  }
+
+  const deleteEvent = async (id, eventId) => {
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        return
+      }
+      const config = {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const { data } = await axiosClient.delete(
+        `/events/delete/${id}/${eventId}`,
+        config
+      )
+
+      const eventsDeleted = events.filter(event => event._id !== eventId)
+      setEvents(eventsDeleted)
+
+      setAlert({
+        msg: data.msg,
+        error: false,
+      })
+      setTimeout(() => {
+        setAlert({})
+        navigate(`/main/community/${id}/events`)
+      }, 3000)
+    } catch (error) {
+      setAlert({
+        msg: error.response.data.msg,
+        error: true,
+      })
+
+      setTimeout(() => {
+        setAlert({})
+      }, 3000)
+    }
+  }
+
+  const exitFromEvent = async (id, eventId) => {
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        return
+      }
+      const config = {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const { data } = await axiosClient.put(
+        `/events/exit/${id}/${eventId}`,
+        {},
+        config
+      )
 
       setAlert({
         msg: data.msg,
@@ -150,6 +273,9 @@ const EventProvider = ({ children }) => {
         getEvent,
         event,
         participateEvent,
+        editEvent,
+        deleteEvent,
+        exitFromEvent,
       }}
     >
       {children}

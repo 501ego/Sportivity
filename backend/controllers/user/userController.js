@@ -1,12 +1,18 @@
 import UserDAO from '../../dao/userDAO.js'
+import { sendEmail } from '../../helpers/email.js'
 
 const register = async (req, res) => {
   try {
-    await UserDAO.createUser(req.body)
+    const user = await UserDAO.createUser(req.body)
+    //TODO sendEmail(user.email, user.token)
+    sendEmail({
+      email: user.email,
+      name: user.name,
+      token: user.token
+    })
     return res.status(201).json({
       msg: 'Usuario registrado correctamente, revisa tu email para confirmar tu cuenta',
     })
-    //TODO sendEmail(user.email, user.token)
   } catch (error) {
     return res.status(500).json({ msg: error.message })
   }

@@ -1,5 +1,6 @@
 import generateJWT from '../../helpers/generateJWT.js'
 import UserDAO from '../../dao/userDAO.js'
+import { sendEmail } from '../../helpers/email.js'
 
 const login = async (req, res) => {
   const { password } = req.body

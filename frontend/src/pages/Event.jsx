@@ -1,24 +1,45 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import useEvent from '../hooks/useEvent'
+import useMember from '../hooks/useMember'
 import moment from 'moment'
 import SimpleMap from '../components/map'
 import Alert from '../components/Alert'
 
 const Event = () => {
   const { id, eventId } = useParams()
-  const { events, getEvent, participateEvent, alert, event } = useEvent()
+  const { events, getEvent, participateEvent, alert, event, deleteEvent, exitFromEvent } = useEvent()
   const [mapCenter, setMapCenter] = useState({
     lat: -33.44194,
     lng: -70.63201,
   })
 
+  let isMember
+
+  if (Array.isArray(event.members)) {
+    isMember = useMember(event)
+  }
+
   useEffect(() => {
     getEvent(eventId)
   }, [])
 
+  const handleDelete = async() => {
+    if (confirm('¿Estás seguro de eliminar este proyecto?')) {
+      await deleteEvent(id, eventId)
+    }
+  }
+
   const handleJoin = async () => {
-    await participateEvent(id, eventId)
+    if (confirm('¿Estás seguro de querer participar en el evento?')){
+      await participateEvent(id, eventId)
+    }
+  }
+
+  const handleExit = async () => {
+    if (confirm('¿Estás seguro de querer salirte del evento?')){
+      await exitFromEvent(id, eventId)
+    }
   }
 
   const { msg } = alert
@@ -47,7 +68,9 @@ const Event = () => {
                   </Link>
                 </button>
 
-                <button className="bg-red-500 btn-sm rounded-md p-2 items-center flex w-full text-slate-100 hover:bg-red-600 justify-center">
+                <button className="bg-red-500 btn-sm rounded-md p-2 items-center flex w-full text-slate-100 hover:bg-red-600 justify-center"
+                  onClick={handleDelete}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -80,14 +103,26 @@ const Event = () => {
         <div className="w-full">
           <SimpleMap center={mapCenter} zoom={11} />
         </div>
-        <div className="flex flex-row justify-center p-2">
-          <button
-            onClick={handleJoin}
-            className="btn btn-accent max-w-xs rounded-xl text-lg flex justify-center items-center w-full"
-          >
-            Participar
-          </button>
-        </div>
+        {isMember ? 
+        (
+          <div className="flex flex-row justify-center p-2">
+            <button
+              onClick={handleExit}
+              className="btn  btn-accent bg-red-500 hover:bg-red-600 max-w-xs rounded-xl text-lg flex justify-center items-center w-full"
+            >
+              Dejar de participar
+            </button>
+          </div>
+        ):(
+          <div className="flex flex-row justify-center p-2">
+            <button
+              onClick={handleJoin}
+              className="btn btn-accent max-w-xs rounded-xl text-lg flex justify-center items-center w-full"
+            >
+              Participar
+            </button>
+          </div>
+        )}
         <div className="flex flex-row gap-4 align-middle justify-center mb-2 mt-2 flex-wrap">
           <div className="badge badge-accent badge-outline p-3">
             <span className="font-semibold text-base">

@@ -1,16 +1,31 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useCommunity from '../hooks/useCommunity'
+import useMember from '../hooks/useMember'
 import useEvent from '../hooks/useEvent'
 import Alert from './Alert'
 import moment from 'moment'
 
 const EventCard = ({ event }) => {
-  const { alert, participateEvent } = useEvent()
+  const { alert, participateEvent, exitFromEvent } = useEvent()
   const navigate = useNavigate()
 
+  let isMember
+
+  if (Array.isArray(event.members)) {
+    isMember = useMember(event)
+  }
+
   const handleJoin = async () => {
-    await participateEvent(event.communityId, event.eventId)
+    if (confirm('¿Estás seguro de querer participar en el evento?')){
+      await participateEvent(event.communityId, event.eventId)
+    }
+  }
+
+  const handleExit = async () => {
+    if (confirm('¿Estás seguro de querer salirte del evento?')){
+      await exitFromEvent(event.communityId, event.eventId)
+    }
   }
 
   const handleClick = () => {
@@ -32,14 +47,26 @@ const EventCard = ({ event }) => {
             </p>
           </div>
         </div>
-        <div className="card-actions justify-center mt-3">
-          <button
-            className="btn btn-accent w-full max-w-xs rounded-xl text-lg"
-            onClick={handleJoin}
-          >
-            Participar
-          </button>
-        </div>
+        {isMember ? 
+        (
+          <div className="flex flex-row justify-center p-2">
+            <button
+              onClick={handleExit}
+              className="btn  btn-accent bg-red-500 hover:bg-red-600 max-w-xs rounded-xl text-lg flex justify-center items-center w-full"
+            >
+              Dejar de participar
+            </button>
+          </div>
+        ):(
+          <div className="flex flex-row justify-center p-2">
+            <button
+              onClick={handleJoin}
+              className="btn btn-accent max-w-xs rounded-xl text-lg flex justify-center items-center w-full"
+            >
+              Participar
+            </button>
+          </div>
+        )}
       </article>
       <div className="flex flex-row gap-4 align-middle justify-center mb-2 flex-wrap">
         <div className="badge badge-accent badge-outline p-3">
