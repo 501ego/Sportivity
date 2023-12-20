@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import useForum from '../hooks/useForum'
+import useCommunity from '../hooks/useCommunity'
+import useAdmin from '../hooks/useAdmin'
+import useMember from '../hooks/useMember'
 import Alert from '../components/Alert'
 import { io } from 'socket.io-client'
 
@@ -17,7 +20,26 @@ const Foro = () => {
     messages,
     getMessagesSocket,
   } = useForum()
+
+  const { community } = useCommunity()
+
+  const navigate = useNavigate()
+
+  const isAdmin = useAdmin(community)
+
+  let isMember
+
+  if (Array.isArray(community.members)) {
+    isMember = useMember(community)
+  }
+
   const { id } = useParams()
+
+  if (!isMember && !isAdmin) {
+    navigate(`/main/community/${id}`)
+  }
+
+  console.log(id)
 
   const handleSubmit = async e => {
     e.preventDefault()
