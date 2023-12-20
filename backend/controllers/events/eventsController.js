@@ -272,7 +272,9 @@ const getEvents = async (req, res) => {
 
 const getEvent = async (req, res) => {
   const { id } = req.params
+
   const event = await EventDAO.findEventByIdPopulate(id)
+
   if (!event) {
     return res.status(404).json({ msg: 'El evento no existe' })
   }

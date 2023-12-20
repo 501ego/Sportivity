@@ -75,4 +75,22 @@ const profile = async (req, res) => {
   return res.json(user)
 }
 
-export { login, confirmEmail, resetPassword, checkToken, newPassword, profile }
+let blacklistedTokens = []
+
+const logout = async (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]
+
+  blacklistedTokens.push(token)
+
+  res.status(200).json({ msg: 'Has cerrado sesión correctamente' })
+}
+
+export {
+  login,
+  confirmEmail,
+  resetPassword,
+  checkToken,
+  newPassword,
+  profile,
+  logout,
+}

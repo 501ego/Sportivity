@@ -4,12 +4,8 @@ import { sendEmail } from '../../helpers/email.js'
 const register = async (req, res) => {
   try {
     const user = await UserDAO.createUser(req.body)
-    //TODO sendEmail(user.email, user.token)
-    sendEmail({
-      email: user.email,
-      name: user.name,
-      token: user.token
-    })
+
+    sendEmail(user)
     return res.status(201).json({
       msg: 'Usuario registrado correctamente, revisa tu email para confirmar tu cuenta',
     })
