@@ -1,3 +1,33 @@
+/**
+ * CommunityContext y CommunityProvider en React
+ *
+ * Estos componentes proporcionan un contexto para gestionar y acceder al estado relacionado con las comunidades.
+ *
+ * CommunityContext:
+ * - Un contexto de React creado usando createContext().
+ * - Permite que los componentes consuman y utilicen información sobre comunidades.
+ *
+ * CommunityProvider:
+ * - Un componente proveedor que encapsula los componentes hijos y les proporciona el contexto.
+ * - Maneja varios estados relacionados con comunidades, como 'communities', 'myCommunities', 'community', 'alert', 'requests', y 'loading'.
+ *
+ * Funcionalidades y Características:
+ * - Carga la lista de comunidades y comunidades del usuario al montar el componente.
+ * - Provee funciones para editar, crear, eliminar, obtener y buscar comunidades.
+ * - Maneja la funcionalidad para enviar solicitudes de membresía y agregar miembros.
+ * - Utiliza axiosClient para realizar solicitudes HTTP a la API y gestionar los datos.
+ * - Maneja un estado de 'alert' para proporcionar feedback al usuario.
+ * - Utiliza 'useNavigate' de 'react-router-dom' para la navegación.
+ *
+ * Uso:
+ * - CommunityProvider debe envolver los componentes que necesitan acceso al estado y las operaciones relacionadas con las comunidades.
+ * - Los componentes hijos pueden acceder a las comunidades y realizar operaciones relacionadas utilizando el hook useContext con CommunityContext.
+ *
+ * Notas:
+ * - Este patrón facilita la centralización y el manejo del estado relacionado con las comunidades, evitando el prop drilling.
+ * - Es importante garantizar que los tokens de autenticación y la información de las comunidades se manejen de manera segura.
+ */
+
 import { useState, useEffect, createContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axiosClient from '../config/axiosClient'

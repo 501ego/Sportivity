@@ -1,3 +1,42 @@
+/**
+ * Account Controllers
+ *
+ * Este archivo contiene controladores para manejar la autenticación de usuarios,
+ * la confirmación de correo electrónico, el restablecimiento de contraseña,
+ * y la gestión de perfil de usuario en una aplicación.
+ *
+ * Controladores:
+ *
+ * - login(req, res): Inicia sesión de un usuario.
+ *   - Verifica confirmación de correo y contraseña.
+ *   - Retorna datos del usuario y token JWT si la autenticación es exitosa.
+ *
+ * - confirmEmail(req, res): Confirma el correo electrónico de un usuario.
+ *   - Retorna un mensaje de éxito o error.
+ *
+ * - resetPassword(req, res): Inicia el proceso de restablecimiento de contraseña.
+ *   - Actualiza el token de usuario y envía un correo con instrucciones.
+ *   - Retorna un mensaje de éxito o error.
+ *
+ * - checkToken(req, res): Verifica la validez de un token de restablecimiento.
+ *   - Retorna un mensaje de validez o error.
+ *
+ * - newPassword(req, res): Establece una nueva contraseña para el usuario.
+ *   - Actualiza la contraseña del usuario y resetea el token.
+ *   - Retorna un mensaje de éxito o error.
+ *
+ * - profile(req, res): Obtiene los datos del perfil del usuario actual.
+ *   - Retorna los datos del perfil del usuario.
+ *
+ * - logout(req, res): Cierra la sesión del usuario.
+ *   - Añade el token JWT a una lista negra para prevenir su reutilización.
+ *   - Retorna un mensaje de cierre de sesión exitoso.
+ *
+ * Notas:
+ * - Los controladores utilizan UserDAO para operaciones de base de datos relacionadas con usuarios.
+ * - Se incluye manejo de errores para garantizar respuestas apropiadas a situaciones fallidas.
+ */
+
 import generateJWT from '../../helpers/generateJWT.js'
 import UserDAO from '../../dao/userDAO.js'
 import { sendEmail } from '../../helpers/email.js'

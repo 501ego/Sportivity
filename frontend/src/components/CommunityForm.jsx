@@ -1,3 +1,39 @@
+/**
+ * Componente CommunityForm
+ *
+ * Este componente es un formulario para la creación de comunidades en la aplicación.
+ *
+ * Estado:
+ * - selectedActivity: Almacena la actividad seleccionada para la comunidad.
+ * - name: Almacena el nombre de la comunidad.
+ * - description: Almacena la descripción de la comunidad.
+ * - rules: Almacena las reglas de la comunidad.
+ * - commune: Almacena la ubicación (comuna) seleccionada.
+ *
+ * Hooks:
+ * - useState: Maneja el estado local del formulario.
+ * - useActivity: Hook personalizado para obtener la lista de actividades disponibles.
+ * - useCommunity: Hook personalizado para manejar la creación de una nueva comunidad y mostrar alertas.
+ *
+ * Funcionalidades:
+ * - Permite al usuario introducir y enviar los datos necesarios para crear una nueva comunidad.
+ * - Utiliza el hook useCommunity para enviar los datos a la API y manejar el estado de las alertas.
+ * - Muestra un mensaje de error si se intenta enviar el formulario con campos vacíos.
+ * - Limpia los campos después de enviar el formulario con éxito.
+ *
+ * JSX:
+ * - El formulario contiene campos para el nombre, descripción, reglas, actividad y ubicación de la comunidad.
+ * - Incluye un input para subir archivos, aunque no parece estar implementado completamente.
+ * - Muestra una alerta si hay un mensaje en el estado de alerta.
+ *
+ * Estilos:
+ * - Utiliza clases de Tailwind CSS para estilizar los inputs, textarea, select, y botones.
+ *
+ * Notas:
+ * - Los datos de las comunas se obtienen de un archivo JSON local.
+ * - No hay manejo actual para la carga de archivos, aunque se incluye un input para ello.
+ */
+
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import useActivity from '../hooks/useActivity'

@@ -1,3 +1,28 @@
+/**
+ * Email Sending Utility
+ *
+ * Utiliza Nodemailer para enviar correos electrónicos.
+ *
+ * Funciones:
+ *
+ * - sendEmail(user): Envía un correo electrónico a un usuario.
+ *   - Parámetros:
+ *     - user: Objeto usuario que debe contener 'email' y 'token'.
+ *   - Funcionalidad:
+ *     - Configura y envía un correo electrónico con un enlace de confirmación.
+ *   - Manejo de Errores:
+ *     - Registra errores en la consola si el envío del correo falla.
+ *
+ * Configuración:
+ * - Utiliza variables de entorno para configurar el transportador de Nodemailer.
+ * - Requiere EMAIL_USER y EMAIL_PASSWORD en el archivo .env.
+ * - Configura un transportador SMTP con los detalles de Gmail.
+ *
+ * Notas:
+ * - La función 'transporter.verify()' se utiliza para validar la configuración del transportador.
+ * - Es importante asegurar que las credenciales del correo electrónico estén protegidas y no expuestas.
+ */
+
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 dotenv.config()

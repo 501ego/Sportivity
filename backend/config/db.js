@@ -1,3 +1,4 @@
+//* Código para conectar a la base de datos de MongoDB, utiliza la libreía mongoose y variables de entorno para la conexión
 import mongoose from 'mongoose'
 
 const connectDB = async () => {

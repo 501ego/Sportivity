@@ -1,3 +1,38 @@
+/**
+ * Componente CommunityCard
+ *
+ * Este componente representa una tarjeta para una comunidad individual en la aplicación.
+ *
+ * Props:
+ * - community: Objeto que contiene la información de la comunidad a mostrar.
+ *
+ * Funcionalidades:
+ * - Muestra el nombre y la descripción de la comunidad.
+ * - Proporciona botones para unirse a la comunidad, ver más detalles o administrarla,
+ *   según el rol del usuario (miembro, administrador, o no miembro).
+ * - Redirige al usuario a la página de detalles de la comunidad al hacer clic en el nombre.
+ *
+ * Hooks:
+ * - useCommunity: Hook para gestionar acciones relacionadas con la comunidad como enviar solicitudes.
+ * - useAuth: Hook para acceder a la información de autenticación del usuario.
+ * - useMember y useAdmin: Hooks para determinar si el usuario actual es miembro o administrador de la comunidad.
+ * - useNavigate de 'react-router-dom' para la navegación.
+ *
+ * Estilos:
+ * - Utiliza clases de Tailwind CSS para estilos como fondo, sombra, tipografía, y disposición.
+ *
+ * Componentes hijo:
+ * - Alert: Componente para mostrar alertas o mensajes de feedback.
+ *
+ * Comportamiento:
+ * - Al hacer clic en el botón correspondiente, el usuario puede unirse a la comunidad,
+ *   ver detalles o administrar la comunidad, dependiendo de su rol.
+ * - Al hacer clic en el nombre de la comunidad, se redirige al usuario a una vista detallada de la misma.
+ *
+ * Notas:
+ * - El componente maneja sus propias alertas y acciones, lo que lo hace reutilizable en diferentes partes de la aplicación.
+ */
+
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useCommunity from '../hooks/useCommunity'

@@ -1,3 +1,31 @@
+/**
+ * User Registration, Edit and Validation Controllers
+ *
+ * Este archivo contiene controladores para manejar el registro, la edición y la validación de usuarios
+ * en una aplicación.
+ *
+ * Controladores:
+ *
+ * - register(req, res): Registra un nuevo usuario.
+ *   - Crea un usuario con los datos proporcionados.
+ *   - Envía un correo electrónico para confirmación de cuenta.
+ *   - Retorna un mensaje de éxito o error.
+ *
+ * - editUser(req, res): Edita los detalles de un usuario existente.
+ *   - Actualiza información del usuario como nombre, ubicación y profesión.
+ *   - Retorna un mensaje de éxito o error.
+ *
+ * - validateUser(req, res): Valida la información adicional de un usuario.
+ *   - Verifica la contraseña y la existencia de un RUT en la base de datos.
+ *   - Actualiza el estado de validación del usuario.
+ *   - Retorna un mensaje de éxito o error.
+ *
+ * Notas:
+ * - Los controladores utilizan UserDAO para operaciones de base de datos relacionadas con usuarios.
+ * - Se incluye manejo de errores para garantizar respuestas adecuadas a situaciones fallidas.
+ * - La validación de usuario puede incluir verificación adicional como la del RUT.
+ */
+
 import UserDAO from '../../dao/userDAO.js'
 import { sendEmail } from '../../helpers/email.js'
 

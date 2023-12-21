@@ -1,3 +1,52 @@
+/**
+ * Community Controller
+ *
+ * Este archivo contiene funciones para manejar operaciones relacionadas con comunidades
+ * en una aplicación de red social o similar.
+ *
+ * Funciones:
+ *
+ * - createCommunity(req, res): Crea una nueva comunidad.
+ *   - Verifica existencia de comunidad, validez del usuario y de la actividad asociada.
+ *
+ * - getMyCommunity(req, res): Obtiene las comunidades del usuario actual.
+ *
+ * - getCommunityById(req, res): Obtiene detalles de una comunidad específica por ID.
+ *
+ * - getCommunities(req, res): Lista todas las comunidades disponibles.
+ *
+ * - editCommunity(req, res): Edita una comunidad existente.
+ *   - Solo permitido por el administrador de la comunidad.
+ *
+ * - deleteCommunity(req, res): Elimina una comunidad existente.
+ *   - Solo permitido por el administrador de la comunidad.
+ *
+ * - addMember(req, res): Agrega un miembro a una comunidad.
+ *   - Requiere permisos de administrador o moderador.
+ *
+ * - deleteMember(req, res): Elimina un miembro de una comunidad.
+ *   - Requiere permisos de administrador o moderador.
+ *
+ * - exitCommunity(req, res): Permite a un usuario salir de una comunidad.
+ *
+ * - sendRequest(req, res): Envía una solicitud para unirse a una comunidad.
+ *
+ * - getRequests(req, res): Obtiene solicitudes de unión pendientes para las comunidades del usuario.
+ *   - Solo visible para administradores.
+ *
+ * - addModerator(req, res): Asigna un moderador en una comunidad.
+ *   - Solo permitido por el administrador de la comunidad.
+ *
+ * - deleteModerator(req, res): Elimina un moderador de una comunidad.
+ *   - Solo permitido por el administrador de la comunidad.
+ *
+ * - getCommunityByName(req, res): Busca comunidades por nombre.
+ *
+ * Notas:
+ * - Las funciones están diseñadas para trabajar con un sistema de base de datos a través de DAOs.
+ * - Manejan la autenticación, autorización, y validaciones de datos.
+ */
+
 import UserDAO from '../../dao/userDAO.js'
 import CommunityDAO from '../../dao/communityDAO.js'
 import ActivityDAO from '../../dao/activityDAO.js'
@@ -290,7 +339,6 @@ const sendRequest = async (req, res) => {
 }
 
 const getRequests = async (req, res) => {
-
   const userAdmin = req.user._id.toString()
   const userExist = await UserDAO.findUserById(userAdmin)
   if (!userExist) {
@@ -298,14 +346,20 @@ const getRequests = async (req, res) => {
   }
   try {
     const communityExist = await CommunityDAO.getMyRequest(userExist._id)
-    
-    if (communityExist.some(community => community.admin._id.toString() !== userExist._id.toString())) {
+
+    if (
+      communityExist.some(
+        community => community.admin._id.toString() !== userExist._id.toString()
+      )
+    ) {
       return res
-      .status(400)
-      .json({ msg: 'No tienes permiso para ver solicitudes' })
+        .status(400)
+        .json({ msg: 'No tienes permiso para ver solicitudes' })
     }
     //console.log(communityExist.filter(community => community.requests.length !== 0))
-    const myRequests = communityExist.filter(community => community.requests.length !== 0)
+    const myRequests = communityExist.filter(
+      community => community.requests.length !== 0
+    )
     const myRequestsFilter = myRequests.flatMap(community =>
       community.requests.map(request => ({
         communityId: community._id,

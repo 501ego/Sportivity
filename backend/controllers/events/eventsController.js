@@ -1,3 +1,39 @@
+/**
+ * Event Management Controllers
+ *
+ * Este archivo contiene controladores para manejar operaciones relacionadas con eventos
+ * en el contexto de comunidades en una aplicación.
+ *
+ * Controladores:
+ *
+ * - createEvent(req, res): Crea un nuevo evento en una comunidad.
+ *   - Verifica permisos del administrador y la existencia de la comunidad y del evento.
+ *
+ * - acceptEvent(req, res): Permite a un usuario unirse a un evento existente.
+ *   - Verifica existencia del usuario y del evento, y pertenencia a la comunidad.
+ *
+ * - editEvent(req, res): Edita los detalles de un evento existente.
+ *   - Requiere permisos de administrador de la comunidad correspondiente.
+ *
+ * - deleteEvent(req, res): Elimina un evento existente.
+ *   - Requiere permisos de administrador de la comunidad.
+ *
+ * - deleteUserFromEvent(req, res): Elimina un usuario de un evento.
+ *   - Requiere permisos de administrador de la comunidad.
+ *
+ * - exitFromEvent(req, res): Permite a un usuario salir de un evento.
+ *   - Verifica pertenencia del usuario al evento y a la comunidad.
+ *
+ * - getEvents(req, res): Obtiene todos los eventos asociados a las comunidades del usuario.
+ *
+ * - getEvent(req, res): Obtiene los detalles de un evento específico por su ID.
+ *   - Verifica la existencia del evento.
+ *
+ * Notas:
+ * - Estos controladores interactúan con DAOs para realizar operaciones de base de datos.
+ * - Incluyen validaciones para asegurar la autorización y la integridad de datos.
+ */
+
 import CommunityDAO from '../../dao/communityDAO.js'
 import EventDAO from '../../dao/eventDAO.js'
 import UserDAO from '../../dao/userDAO.js'

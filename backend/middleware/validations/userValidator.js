@@ -1,3 +1,30 @@
+/**
+ * User Validators
+ *
+ * Este archivo contiene middlewares para validar la existencia y permisos de usuarios
+ * en una aplicación.
+ *
+ * Middlewares:
+ *
+ * - userExist(req, res, next): Verifica la existencia de un usuario.
+ *   - Busca un usuario por '_id', 'id', 'email', 'userName', o 'token'.
+ *   - Confirma el correo del usuario si es necesario.
+ *   - Establece 'req.userExist' con los datos del usuario encontrado.
+ *   - Retorna un error si el usuario no existe o si faltan parámetros.
+ *
+ * - userNameOrEmailExist(req, res, next): Verifica si el nombre de usuario o correo ya existen.
+ *   - Retorna un error si el nombre de usuario o correo ya están registrados.
+ *   - Continúa con el siguiente middleware si no hay conflictos.
+ *
+ * - userHasPermission(req, res, next): Verifica si el usuario actual tiene permiso para una operación.
+ *   - Compara el 'id' en los parámetros con el 'id' del usuario en la sesión.
+ *   - Retorna un error si no hay coincidencia o si faltan parámetros.
+ *
+ * Notas:
+ * - Estos middlewares son esenciales para garantizar la seguridad y consistencia de las operaciones de usuario.
+ * - Se utilizan para prevenir acciones no autorizadas y para validar datos de entrada.
+ */
+
 import UserDAO from '../../dao/userDAO.js'
 
 const userExist = async (req, res, next) => {
