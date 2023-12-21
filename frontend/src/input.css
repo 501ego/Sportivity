@@ -1,0 +1,37 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.background_image {
+  background-image: url('../public/img/background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.85;
+}
+
+.normal-box {
+  @apply my-10 bg-white shadow-lg rounded-lg flex flex-col p-[50px] w-full;
+}
+
+.screen-center {
+  @apply container mx-auto max-w-2xl h-screen items-center justify-center flex p-2;
+}
+.custom-input-label {
+  @apply uppercase text-zinc-600 block text-xl font-bold;
+}
+.custom-input {
+  @apply input input-bordered w-full bg-gray-50 text-lg;
+}
+.custom-auth-button {
+  @apply btn btn-accent w-full py-3 text-white uppercase font-bold rounded hover:cursor-pointer;
+}
+.custom-link {
+  @apply link link-hover text-center text-slate-500 uppercase text-sm;
+}
+.custom-input-span {
+  @apply label-text text-lg text-zinc-800;
+}
+.custom-select {
+  @apply select select-bordered w-full bg-gray-50 text-lg;
+}
